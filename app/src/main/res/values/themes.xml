@@ -1,0 +1,29 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Light Theme -->
+    <style name="Theme.Assignment1" parent="Theme.Material3.Light.NoActionBar">
+        <item name="colorPrimary">@color/soft_pink</item>
+        <item name="colorPrimaryVariant">@color/soft_purple</item>
+        <item name="colorSecondary">@color/soft_blue</item>
+        <item name="colorSecondaryVariant">@color/soft_yellow</item>
+        <item name="colorSurface">@color/light_gray</item> <!-- Surface color for cards and dialogs -->
+        <item name="colorError">@color/dark_pink</item> <!-- Error color -->
+        <item name="colorOnPrimary">@color/text_black</item> <!-- Text color on primary -->
+        <item name="colorOnSecondary">@color/text_black</item> <!-- Text color on secondary -->
+        <item name="colorOnBackground">@color/text_black</item> <!-- Text color on background -->
+        <item name="colorOnSurface">@color/text_black</item> <!-- Text color on surface -->
+        <item name="colorOnError">@color/text_white</item> <!-- Text color on error -->
+    </style>
+
+    <!-- App Bar Theme -->
+    <style name="Theme.AppBarAndSwipe" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="colorPrimary">@color/soft_pink</item>
+        <item name="colorPrimaryVariant">@color/soft_purple</item>
+        <item name="colorSecondary">@color/soft_blue</item>
+        <item name="colorSecondaryVariant">@color/soft_yellow</item>
+        <item name="colorSurface">@color/light_gray</item>
+        <item name="colorOnSurface">@color/text_black</item>
+        <!-- Define additional styles for action bar if needed -->
+        <item name="actionBarTheme">@style/Widget.MaterialComponents.ActionBar.Primary</item>
+    </style>
+</resources>
+

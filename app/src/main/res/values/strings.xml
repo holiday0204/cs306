@@ -1,0 +1,47 @@
+<resources>
+    <string name="app_name">321 QuizTime</string>
+    <string name="app_header">321 Quiz Time App</string>
+    <string name="app_info">A quiz app where you can customise the needs for your quiz</string>
+    <string name="points_text">A quiz app where you can customise the needs for your quiz</string>
+    <string name="quiz_history">Below is the quiz history</string>
+    <string name="welcome_text">Welcome Back</string>
+    <string name="start_quiz">Start Quiz</string>
+
+    <!-- New strings for the quiz setup -->
+    <string name="timer_label">Select Timer Duration</string>
+    <string name="countdown_timer">Time Remaining: 00:00</string>
+    <string name="topic_label">Select Topic</string>
+    <string name="question_type_label">Select Question Type</string>
+    <string name="multiple_choice">Multiple Choice</string>
+    <string name="short_answer">Short Answer</string>
+    <string name="fill_in_the_blank">Fill in the Blank</string>
+    <string name="question_count_label">Select Number of Questions</string>
+    <string name="confirm_button">Start Quiz</string>
+    <string name="difficulty_label">Select Difficulty Level</string>
+    <string name="time_length">5</string>
+
+
+    <string-array name="difficulty_levels">
+        <item>Easy</item>
+        <item>Medium</item>
+        <item>Hard</item>
+    </string-array>
+
+    <string-array name="categories_array">
+        <item>Science</item>
+        <item>Math</item>
+        <item>History</item>
+        <item>Geography</item>
+    </string-array>
+
+    <string name="score_summary">Congratulations! You scored %1$d out of %2$d</string>
+    <string name="restart">Restart Quiz</string>
+    <string name="retake">Retake Quiz</string>
+    <string name="feedback">Your Answers</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="sign_up">Sign Up</string>
+
+
+</resources>

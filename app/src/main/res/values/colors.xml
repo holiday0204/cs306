@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Light Theme Colors -->
+    <color name="soft_pink">#FFB6C1</color>
+    <color name="soft_blue">#87CEEB</color>
+    <color name="soft_purple">#D8BFD8</color>
+    <color name="soft_yellow">#FFFACD</color>
+    <color name="text_black">#FF000000</color>
+    <color name="text_white">#FFFFFFFF</color>
+
+    <!-- Dark Theme Colors -->
+    <color name="dark_pink">#C49092</color>
+    <color name="dark_blue">#5C8CA9</color>
+    <color name="dark_purple">#A495A6</color>
+    <color name="dark_yellow">#D8D6A3</color>
+    <color name="light_gray">#D3D3D3</color>
+    <color name="dark_gray">#505050</color>
+
+    <!-- Error Color -->
+    <color name="soft_red">#FF6347</color> <!-- Example error color -->
+
+    <color name="black">#121212</color> <!-- Ensure this exists -->
+    <color name="white">#FFFFFF</color>
+    <color name="transparent">#00000000</color>
+
+
+</resources>
+

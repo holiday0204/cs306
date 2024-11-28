@@ -1,0 +1,16 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Dark Theme -->
+    <style name="Theme.Assignment1" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="colorPrimary">@color/dark_pink</item>
+        <item name="colorPrimaryVariant">@color/dark_purple</item>
+        <item name="colorSecondary">@color/dark_blue</item>
+        <item name="colorSecondaryVariant">@color/dark_yellow</item>
+        <item name="colorSurface">@color/dark_gray</item> <!-- Surface color for cards and dialogs -->
+        <item name="colorError">@color/soft_red</item> <!-- Use a suitable error color -->
+        <item name="colorOnPrimary">@color/text_white</item> <!-- Text color on primary -->
+        <item name="colorOnSecondary">@color/text_white</item> <!-- Text color on secondary -->
+        <item name="colorOnBackground">@color/text_white</item> <!-- Text color on background -->
+        <item name="colorOnSurface">@color/text_white</item> <!-- Text color on surface -->
+        <item name="colorOnError">@color/text_black</item> <!-- Text color on error -->
+    </style>
+</resources>

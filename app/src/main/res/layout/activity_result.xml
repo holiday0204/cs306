@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="@color/white">
+
+    <!-- Score Summary Section -->
+    <TextView
+        android:id="@+id/score_summary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/score_summary"
+        android:textColor="@color/text_black"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <!-- Progress Bar for Score -->
+    <ProgressBar
+        android:id="@+id/score_progress"
+        style="@android:style/Widget.ProgressBar.Horizontal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:max="100"
+        android:progress="0"
+        app:layout_constraintTop_toBottomOf="@id/score_summary"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:progressTint="@color/soft_blue" />
+
+    <!-- Detailed Feedback Section -->
+    <TextView
+        android:id="@+id/feedback_header"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="@string/feedback"
+        android:textColor="@color/dark_blue"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/score_progress" />
+
+    <!-- ListView for Feedback -->
+    <ListView
+        android:id="@+id/feedback_list"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:divider="@android:color/darker_gray"
+        android:dividerHeight="1dp"
+        app:layout_constraintBottom_toTopOf="@id/button_container"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/feedback_header" />
+
+    <!-- Retake/Restart Buttons -->
+    <LinearLayout
+        android:id="@+id/button_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp">
+
+        <Button
+            android:id="@+id/restart_quiz_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/restart"
+            android:layout_weight="1"
+            android:layout_marginEnd="4dp"
+            android:padding="4dp"
+            android:backgroundTint="@color/soft_yellow" />
+
+        <Button
+            android:id="@+id/retake_quiz_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="@string/retake"
+            android:layout_weight="1"
+            android:layout_marginEnd="4dp"
+            android:padding="8dp"
+            android:backgroundTint="@color/soft_pink"/>
+    </LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
