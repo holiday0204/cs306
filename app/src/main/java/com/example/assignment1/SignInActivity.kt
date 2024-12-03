@@ -8,10 +8,12 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.assignment1.databinding.ActivitySignInBinding
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
 class SignInActivity : AppCompatActivity() {
+
     private lateinit var auth: FirebaseAuth
     private lateinit var binding: ActivitySignInBinding
     private lateinit var email: String
@@ -22,10 +24,11 @@ class SignInActivity : AppCompatActivity() {
         binding = ActivitySignInBinding.inflate(layoutInflater) // Use correct binding
         setContentView(binding.root)
 
+        // Initialize Firebase Auth
+        auth = Firebase.auth
+
         // Remove action bar
         supportActionBar?.hide()
-
-        auth = Firebase.auth
 
         // Handle sign-in button click
         binding.SignInButton.setOnClickListener {
@@ -33,32 +36,59 @@ class SignInActivity : AppCompatActivity() {
                 auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         Toast.makeText(this, "Successfully signed in", Toast.LENGTH_SHORT).show()
-                        val intent = Intent(this, QuizSetupActivity::class.java)
+                        val intent = Intent(this, HomePageActivity::class.java)
                         startActivity(intent)
                         finish()
                     } else {
-                        Log.e("Error", task.exception.toString())
+                        // Log detailed Firebase error message
+                        Log.e("SignInError", "Sign-in failed: ${task.exception?.message}")
                         Toast.makeText(this, "Sign-in failed. Check your credentials.", Toast.LENGTH_SHORT).show()
                     }
                 }
             }
         }
-        binding.tvCreateAccount.setOnClickListener{
+
+        binding.tvCreateAccount.setOnClickListener {
             val intent = Intent(this, SignUpActivity::class.java)
             startActivity(intent)
             finish()
         }
-//        binding.tvForgotPassword.setOnClickListener{
-//            val intent = Intent(this, ForgotPasswordActivity::class.java)
-//            startActivity(intent)
-//            finish()
-//        }
     }
 
-    private fun checkAllFields(): Boolean {
-        email = binding.etEmail.text.toString() // Assign email
+    override fun onStart() {
+        super.onStart()
 
-        if (binding.etEmail.text.toString() == "") {
+        // Check if the user is signed in
+        val currentUser = auth.currentUser
+
+        // If a user is signed in, navigate to the next activity
+        if (currentUser != null) {
+            updateUI(currentUser)  // Optionally update UI for the signed-in user
+            val intent = Intent(this, QuizSetupActivity::class.java)
+            startActivity(intent)
+            finish()  // Close this SignInActivity
+        }
+    }
+    private fun updateUI(user: FirebaseUser?) {
+        if (user != null) {
+            // Optional: You can navigate to the next screen or show something based on the user.
+            val intent = Intent(this, QuizSetupActivity::class.java)
+            startActivity(intent)
+            finish()  // Close the current SignInActivity
+        } else {
+            // Handle the case where there is no signed-in user (e.g., show sign-in screen)
+            Toast.makeText(this, "No user signed in", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
+
+    // Function to validate input fields
+    private fun checkAllFields(): Boolean {
+        email = binding.etEmail.text.toString()
+        password = binding.etPassword.text.toString()
+
+        if (email.isEmpty()) {
             binding.textInputLayoutEmail.error = "This is a required field"
             return false
         }
@@ -68,17 +98,18 @@ class SignInActivity : AppCompatActivity() {
             return false
         }
 
-        if (binding.etPassword.text.toString() == "") {
+        if (password.isEmpty()) {
             binding.textInputLayoutPassword.error = "Password cannot be empty"
             binding.textInputLayoutPassword.errorIconDrawable = null
             return false
         }
 
-        if (binding.etPassword.length() <= 6) {
+        if (password.length <= 6) {
             binding.textInputLayoutPassword.error = "Password should be at least 8 characters"
             binding.textInputLayoutPassword.errorIconDrawable = null
             return false
         }
+
         return true
     }
 }

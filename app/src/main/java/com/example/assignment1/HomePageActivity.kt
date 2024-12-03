@@ -27,6 +27,11 @@ class HomePageActivity : AppCompatActivity() {
         // Initialize FirebaseAuth instance
         auth = Firebase.auth
 
+        binding.startQuizButton.setOnClickListener {
+            val intent = Intent(this, QuizSetupActivity::class.java)
+            startActivity(intent)
+        }
+
         // Set up the Sign-Out button
         binding.SignOutButton.setOnClickListener {
             // Sign out the user from Firebase

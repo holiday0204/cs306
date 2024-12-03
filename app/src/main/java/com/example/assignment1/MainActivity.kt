@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
             val user = auth.currentUser
             if (user != null) {
                 //if theres already an account go to home
-                val intent = Intent(this, QuizSetupActivity::class.java)
+                val intent = Intent(this, HomePageActivity::class.java)
                 startActivity(intent)
                 //use to destroy current activity
                 finish()
