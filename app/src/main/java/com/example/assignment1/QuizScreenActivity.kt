@@ -1,47 +1,22 @@
 package com.example.assignment1
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.assignment1.databinding.ActivityMainBinding
-import com.google.firebase.database.FirebaseDatabase
+import android.widget.Toast
+import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 
 class QuizScreenActivity : AppCompatActivity() {
-    lateinit var binding: ActivityMainBinding
-    lateinit var quizModelList: MutableList<QuizModel>
-    lateinit var adapter: QuizListAdapter
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setContentView(R.layout.activity_quiz_screen)
 
-        quizModelList = mutableListOf()
-        getDataFromFirebase()
-    }
+        // Retrieve the passed data from the Intent
+        val selectedCategory = intent.getStringExtra("CATEGORY")
+        val selectedDifficulty = intent.getStringExtra("DIFFICULTY")
 
-    private fun setupRecyclerView() {
-        binding.progressBar.visibility = View.GONE
-        adapter = QuizListAdapter(quizModelList)
-        binding.recyclerView.layoutManager = LinearLayoutManager(this)
-        binding.recyclerView.adapter = adapter
-    }
-
-    private fun getDataFromFirebase() {
-        binding.progressBar.visibility = View.VISIBLE
-        FirebaseDatabase.getInstance().reference
-            .get()
-            .addOnSuccessListener { dataSnapshot ->
-                if (dataSnapshot.exists()) {
-                    for (snapshot in dataSnapshot.children) {
-                        val quizModel = snapshot.getValue(QuizModel::class.java)
-                        if (quizModel != null) {
-                            quizModelList.add(quizModel)
-                        }
-                    }
-                }
-                setupRecyclerView()
-            }
+        // Use the retrieved data (e.g., display it or use it to fetch questions)
+        Toast.makeText(this, "Category: $selectedCategory, Difficulty: $selectedDifficulty", Toast.LENGTH_SHORT).show()
     }
 }

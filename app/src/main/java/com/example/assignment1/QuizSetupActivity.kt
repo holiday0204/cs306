@@ -5,6 +5,7 @@ import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.AdapterView
+import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -13,6 +14,7 @@ class QuizSetupActivity : AppCompatActivity() {
     lateinit var category: Spinner
     lateinit var difficulty: Spinner
     lateinit var text: TextView
+    lateinit var startButton: Button  // Declare the start button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,6 +24,7 @@ class QuizSetupActivity : AppCompatActivity() {
         category = findViewById(R.id.topicSpinner)
         difficulty = findViewById(R.id.difficultySpinner)
         text = findViewById(R.id.questionTypeLabel)
+        startButton = findViewById(R.id.startButton)  // Initialize the start button
 
         // Fetch the string arrays from resources
         val categoriesArray = resources.getStringArray(R.array.categories_array)
@@ -82,6 +85,18 @@ class QuizSetupActivity : AppCompatActivity() {
                 text.text = "Difficulty Selected: $selectedDifficulty"
             }
         }
+
+        // Set the OnClickListener for the Start button
+        startButton.setOnClickListener {
+            // Get the selected category and difficulty values
+            val selectedCategory = category.selectedItem.toString()
+            val selectedDifficulty = difficulty.selectedItem.toString()
+
+            intent.putExtra("CATEGORY", selectedCategory)
+            intent.putExtra("DIFFICULTY", selectedDifficulty)
+
+            // Start the QuizScreenActivity
+            startActivity(intent)
+        }
     }
 }
-

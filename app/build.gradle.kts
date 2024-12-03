@@ -66,4 +66,6 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.ion)
+    implementation("org.mindrot:jbcrypt:0.4")
+
 }
