@@ -62,10 +62,13 @@ dependencies {
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore)
     implementation(libs.firebase.database.ktx)
+    implementation(libs.firebase.storage.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     implementation(libs.ion)
-    implementation("org.mindrot:jbcrypt:0.4")
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.jbcrypt)
 
 }

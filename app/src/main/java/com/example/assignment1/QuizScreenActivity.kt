@@ -10,7 +10,7 @@ import androidx.core.view.WindowInsetsCompat
 class QuizScreenActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_quiz_screen)
+        setContentView(R.layout.activity_quiz)
 
         // Retrieve the passed data from the Intent
         val selectedCategory = intent.getStringExtra("CATEGORY")

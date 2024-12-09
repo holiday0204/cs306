@@ -1,19 +1,20 @@
 package com.example.assignment1
 
 data class QuizModel(
-    val id : String,
-    val title : String,
-    val subtitle : String,
-    val time : String,
-    val questionList : List<QuestionModel>
-){
-    constructor() : this("","","","", emptyList())
-}
+    val overall: OverallStats,
+    val categories: Map<String, CategoryStats>
+)
 
-data class QuestionModel(
-    val question : String,
-    val options : List<String>,
-    val correct : String,
-){
-    constructor() : this ("", emptyList(),"")
-}
+data class OverallStats(
+    val total_num_of_questions: Int,
+    val total_num_of_pending_questions: Int,
+    val total_num_of_verified_questions: Int,
+    val total_num_of_rejected_questions: Int
+)
+
+data class CategoryStats(
+    val total_num_of_questions: Int,
+    val total_num_of_pending_questions: Int,
+    val total_num_of_verified_questions: Int,
+    val total_num_of_rejected_questions: Int
+)
