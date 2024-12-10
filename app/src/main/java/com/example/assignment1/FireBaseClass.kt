@@ -10,6 +10,7 @@ import com.example.assignment1.Constants
 import com.example.assignment1.UserModel
 import com.google.android.gms.tasks.Task
 import com.google.android.material.imageview.ShapeableImageView
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -73,6 +74,7 @@ class FireBaseClass {
         }
     }
 
+
     fun updateScore(newScore: Double) {
         val userDocument = mFireStore.collection(Constants.user).document(getCurrentUserId())
         getUserInfo(object : UserInfoCallback {
@@ -131,10 +133,12 @@ class FireBaseClass {
     fun getCurrentUserId(): String {
         val currentUser = Firebase.auth.currentUser
         var currentUserId = ""
-        if (currentUser != null)
+        if (currentUser != null) {
             currentUserId = currentUser.uid
+        }
         return currentUserId
     }
+
 
     interface UserInfoCallback {
         fun onUserInfoFetched(userInfo: UserModel?)

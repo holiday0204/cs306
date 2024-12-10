@@ -68,10 +68,14 @@ class SignUpActivity : AppCompatActivity() {
                                         "email" to email,
                                         "password" to password,
                                         "userId" to userId,
+                                        "name" to accountName,
                                         "gender" to gender,
                                         "dob" to dob,
                                         "createdAt" to System.currentTimeMillis()
                                     )
+                                    Log.d(TAG, "User to be saved: $user")
+                                    saveUserToFirestore(userId, user)
+
 
                                     // Then pass this to the Firestore save function
                                     saveUserToFirestore(userId, user)

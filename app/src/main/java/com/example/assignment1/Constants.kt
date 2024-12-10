@@ -42,7 +42,7 @@ object Constants {
         list.add(
             CategoryModel("9", R.drawable.general_knowledge, "General Knowledge")
         )
-//        list.add(
+        list.add(
 //            CategoryModel("10",R.drawable.books,"Books")
 //        )
 //        list.add(
@@ -112,7 +112,7 @@ object Constants {
 //        list.add(
 //            CategoryModel("32",R.drawable.cartoon,"Cartoons & Animations")
 //        )
-        return list
+        return list)
     }
 
     fun getRandomOptions(correctAnswer:String,incorrectAnswer:List<String>):Pair<String,List<String>>

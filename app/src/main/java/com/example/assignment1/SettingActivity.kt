@@ -1,5 +1,6 @@
 package com.example.assignment1
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
@@ -11,7 +12,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
-class SettingsActivity : AppCompatActivity() {
+class SettingActivity : AppCompatActivity() {
     private lateinit var auth: FirebaseAuth
     private lateinit var binding: ActivitySettingBinding
 
@@ -22,6 +23,18 @@ class SettingsActivity : AppCompatActivity() {
 
         // Initialize FirebaseAuth instance
         auth = Firebase.auth
+
+        binding.SignOutButton.setOnClickListener {
+            // Sign out the user from Firebase
+            auth.signOut()
+
+            // Navigate back to the Sign-In screen
+            val intent = Intent(this, SignInActivity::class.java)
+            startActivity(intent)
+
+            // Finish the current activity
+            finish()
+        }
 
         // Set up Update Password button
         binding.UpdatePasswordButton.setOnClickListener {
