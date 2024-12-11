@@ -20,20 +20,25 @@ class ResultActivity : AppCompatActivity() {
 
         // Retrieve the ResultModel list passed from the previous activity
         val resultList: ArrayList<ResultModel>? =
-            intent.getParcelableArrayListExtra("resultList") // This retrieves the ResultModel list
+            intent.getParcelableArrayListExtra("resultList")
 
         // Set up the RecyclerView for showing the result summary with a click listener
         binding.rvSummary.layoutManager = LinearLayoutManager(this)
         val adapter = QuizSummaryAdapter(resultList ?: arrayListOf()) { result ->
-            // Handle item click, e.g., show a detailed view or a toast
-            Toast.makeText(this, "Clicked on ${result.type}", Toast.LENGTH_SHORT).show()
+            // Handle item click, show a detailed message with the question and result status
+            val resultMessage = if (result.score > 0) {
+                "Correct! Your answer: ${result.selectedAnswer}"
+            } else {
+                "Incorrect! Correct answer: ${result.correctAnswer}"
+            }
+            Toast.makeText(this, "${result.question}\n$resultMessage", Toast.LENGTH_LONG).show()
         }
         binding.rvSummary.adapter = adapter
 
         // Show or hide the RecyclerView based on whether the list is empty
         if (adapter.itemCount == 0) {
             binding.rvSummary.visibility = View.GONE
-            binding.tvEmptyState.visibility = View.VISIBLE // Ensure you have a TextView for empty state in your layout
+            binding.tvEmptyState.visibility = View.VISIBLE
         } else {
             binding.rvSummary.visibility = View.VISIBLE
             binding.tvEmptyState.visibility = View.GONE
@@ -43,7 +48,7 @@ class ResultActivity : AppCompatActivity() {
         val finalScore = getFinalScore(resultList ?: arrayListOf())
 
         // Calculate the total number of questions and the number of correct answers
-        val correctAnswers = resultList?.count { it.score > 0 } ?: 0 // Count answers where score > 0 (indicating correct answers)
+        val correctAnswers = resultList?.count { it.score > 0 } ?: 0
         val totalQuestions = resultList?.size ?: 0
 
         // Calculate percentage based on the final score (total score / number of questions)
@@ -77,12 +82,12 @@ class ResultActivity : AppCompatActivity() {
         }
     }
 
+    // Function to calculate the final score
     private fun getFinalScore(list: ArrayList<ResultModel>): Double {
         var totalScore = 0.0
         for (item in list) {
-            totalScore += if (item.score > 1.0) 1.0 else item.score // Ensure score doesn't exceed 1.0
+            totalScore += if (item.score > 1.0) 1.0 else item.score
         }
         return totalScore
     }
-
 }

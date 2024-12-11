@@ -4,27 +4,33 @@ import android.os.Parcel
 import android.os.Parcelable
 
 data class ResultModel(
-    var time: Int,  // Time taken to answer this question (in seconds)
-    var type: String?,  // Type of question (e.g., multiple choice, true/false)
-    var difficulty: String?,  // Difficulty level of the question (e.g., easy, medium, hard)
-    var score: Double,  // Score for this question (1.0 for correct, 0.0 for incorrect)
-    var timeBonus: Double = 0.0 // Default value for timeBonus if not passed
+    var question: String,
+    var correctAnswer: String,
+    var selectedAnswer: String,
+    var isCorrect: Boolean,
+    var time: Int,
+    var score: Double,
+    var timeBonus: Double = 0.0
 ) : Parcelable {
 
     constructor(parcel: Parcel) : this(
+        parcel.readString() ?: "",
+        parcel.readString() ?: "",
+        parcel.readString() ?: "",
+        parcel.readByte() != 0.toByte(),
         parcel.readInt(),
-        parcel.readString(),
-        parcel.readString(),
         parcel.readDouble(),
-        parcel.readDouble() // Ensure you read all required data from the parcel
+        parcel.readDouble()
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(question)
+        parcel.writeString(correctAnswer)
+        parcel.writeString(selectedAnswer)
+        parcel.writeByte(if (isCorrect) 1 else 0)
         parcel.writeInt(time)
-        parcel.writeString(type)
-        parcel.writeString(difficulty)
         parcel.writeDouble(score)
-        parcel.writeDouble(timeBonus) // Write the timeBonus to parcel
+        parcel.writeDouble(timeBonus)
     }
 
     override fun describeContents(): Int = 0

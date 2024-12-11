@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Question Text -->
+        <TextView
+            android:id="@+id/tvQuestion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Question: "
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <!-- User's Selected Answer -->
+        <TextView
+            android:id="@+id/tvSelectedAnswer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your Answer: "
+            android:textSize="14sp"
+            android:layout_marginTop="8dp" />
+
+        <!-- Correct Answer -->
+        <TextView
+            android:id="@+id/tvCorrectAnswer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Correct Answer: "
+            android:textSize="14sp"
+            android:layout_marginTop="4dp" />
+
+        <!-- Correct/Incorrect Status -->
+        <TextView
+            android:id="@+id/tvResultStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Result: "
+            android:textSize="14sp"
+            android:textStyle="italic"
+            android:layout_marginTop="4dp" />
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>

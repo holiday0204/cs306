@@ -11,7 +11,7 @@ data class QuizResult(
     val category: String,
     val type: String,
     val difficulty: String,
-    val question: String,
-    val correct_answer: String,
-    val incorrect_answers: List<String>
-):Serializable
+    val question: String,  // The question text
+    val correct_answer: String,  // The correct answer for the question
+    val incorrect_answers: List<String> // The incorrect answers
+) : Serializable

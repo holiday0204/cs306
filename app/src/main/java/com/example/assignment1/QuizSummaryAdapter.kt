@@ -4,7 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.assignment1.databinding.ItemResultBinding
-import com.example.assignment1.ResultModel
+
 class QuizSummaryAdapter(
     private val resultList: ArrayList<ResultModel>,
     private val onItemClick: (ResultModel) -> Unit  // Add click listener parameter
@@ -12,12 +12,25 @@ class QuizSummaryAdapter(
 
     inner class ResultViewHolder(private val binding: ItemResultBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(result: ResultModel) {
-            binding.tvQuestionType.text = "Type: ${result.type}"
-            binding.tvQuestionDifficulty.text = "Difficulty: ${result.difficulty}"
-            binding.tvScore.text = "Score: ${String.format("%.2f", result.score)}"
-            binding.tvTime.text = "Time Taken: ${result.time}s"
 
+        fun bind(result: ResultModel) {
+            // Display the question
+            binding.tvQuestion.text = "Question: ${result.question}"
+
+            // Display the user's selected answer
+            binding.tvSelectedAnswer.text = "Your Answer: ${result.selectedAnswer}"
+
+            // Display the correct answer
+            binding.tvCorrectAnswer.text = "Correct Answer: ${result.correctAnswer}"
+
+            // Indicate if the answer was correct or incorrect
+            binding.tvResultStatus.text = if (result.isCorrect) {
+                "Result: Correct"
+            } else {
+                "Result: Incorrect"
+            }
+
+            // Handle item click
             binding.root.setOnClickListener {
                 onItemClick(result)
             }
