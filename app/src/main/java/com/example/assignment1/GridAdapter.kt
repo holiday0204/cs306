@@ -24,10 +24,10 @@ class GridAdapter(private val items: List<CategoryModel>,
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = items[position]
-        holder.image.setImageResource(item.image)
+//        holder.image.setImageResource(item.image)
         holder.tvCategoryName.text = item.name
         val count = categoryStat[item.id]?.total_num_of_questions
-        holder.tvQuestionCount.text = count.toString() + " questions"
+//        holder.tvQuestionCount.text = count.toString() + " questions"
 
         holder.itemView.setOnClickListener {
             if (onClickListener!= null)
@@ -40,9 +40,9 @@ class GridAdapter(private val items: List<CategoryModel>,
     override fun getItemCount(): Int = items.size
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val image:ImageView = itemView.findViewById(R.id.iv_category_icon)
+//        val image:ImageView = itemView.findViewById(R.id.iv_category_icon)
         val tvCategoryName:TextView = itemView.findViewById(R.id.tv_Category_name)
-        val tvQuestionCount:TextView = itemView.findViewById(R.id.tv_no_of_questions)
+//        val tvQuestionCount:TextView = itemView.findViewById(R.id.tv_no_of_questions)
     }
 
     fun setOnClickListener(onClickListener: OnClickListener)

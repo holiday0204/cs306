@@ -48,7 +48,6 @@
         android:minHeight="48dp"
         android:padding="8dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/topicLabel" />
 
@@ -63,27 +62,16 @@
         app:layout_constraintTop_toBottomOf="@id/topicSpinner"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <RadioGroup
-        android:id="@+id/questionTypeRadioGroup"
+    <Spinner
+        android:id="@+id/questionTypeSpinner"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
+        android:padding="16dp"
         app:layout_constraintTop_toBottomOf="@id/questionTypeLabel"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintEnd_toEndOf="parent" />
 
-        <RadioButton
-            android:id="@+id/multipleChoiceRadio"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/multiple_choice" />
-
-        <RadioButton
-            android:id="@+id/shortAnswerRadio"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="True/False" />
-    </RadioGroup>
 
     <!-- Question Count Selection -->
     <TextView
@@ -93,7 +81,7 @@
         android:layout_marginTop="8dp"
         android:text="@string/question_count_label"
         android:textSize="18sp"
-        app:layout_constraintTop_toBottomOf="@id/questionTypeRadioGroup"
+        app:layout_constraintTop_toBottomOf="@id/questionTypeSpinner"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Spinner

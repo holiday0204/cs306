@@ -1,161 +1,143 @@
 package com.example.assignment1
 
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.ArrayAdapter
-import android.widget.Spinner
 import android.widget.AdapterView
-import android.widget.Button
-import android.widget.TextView
-import android.widget.Toast
-import android.content.Intent
-import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import android.widget.AdapterView.OnItemSelectedListener
+import android.widget.ArrayAdapter
+import android.widget.SeekBar
+import android.widget.Spinner
+import android.widget.SpinnerAdapter
+import com.example.assignment1.Constants
+import com.example.assignment1.databinding.ActivityQuizSetupBinding
+import com.example.assignment1.QuizClass
 
 class QuizSetupActivity : AppCompatActivity() {
-    lateinit var category: Spinner
-    lateinit var difficulty: Spinner
-    lateinit var numQuestions: Spinner  // Spinner for number of questions
-    lateinit var text: TextView
-    lateinit var startButton: Button  // Declare the start button
-    lateinit var categoryAdapter: ArrayAdapter<String>  // Adapter for categories
-    lateinit var categories: List<CategoryModel>  // List to store categories
 
+
+    private var binding: ActivityQuizSetupBinding? = null
+    private var amount = 10
+    private var category: Int? = null
+    private var difficulty: String? = null
+    private var type: String? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_quiz_setup)
+        binding = ActivityQuizSetupBinding.inflate(layoutInflater)
+        setContentView(binding?.root)
 
-        // Initialize the category, difficulty, and number of questions spinners
-        category = findViewById(R.id.topicSpinner)
-        difficulty = findViewById(R.id.difficultySpinner)
-        numQuestions = findViewById(R.id.numOfQuestionSpinner)  // Initialize the new Spinner
-        text = findViewById(R.id.questionTypeLabel)
-        startButton = findViewById(R.id.startButton)  // Initialize the start button
+        handleSpinner()
 
-        // Set up Retrofit for the API call
-        val retrofit = Retrofit.Builder()
-            .baseUrl("https://opentdb.com/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+        val categoryList = Constants.getCategoryStringArray()
+        binding?.topicSpinner?.adapter = getSpinnerAdapter(categoryList)
+        binding?.difficultySpinner?.adapter = getSpinnerAdapter(Constants.difficultyList)
+        binding?.questionTypeSpinner?.adapter = getSpinnerAdapter(Constants.typeList)
 
-        val service: QuizService = retrofit.create(QuizService::class.java)
+        handleCategorySpinner()
+        handleDifficultySpinner()
+        handleTypeSpinner()
 
-        // Fetch categories from the API
-        service.getCategories().enqueue(object : Callback<CategoryResponse> {
-            override fun onResponse(call: Call<CategoryResponse>, response: Response<CategoryResponse>) {
-                if (response.isSuccessful) {
-                    val categories = response.body()?.triviaCategories ?: emptyList()
-                    val categoryNames = categories.map { it.name }
+        val quizClass = QuizClass(this)
+        binding?.startButton?.setOnClickListener {
+            quizClass.getQuizList(amount, category, difficulty, type)
+        }
+    }
 
-                    // Log the category names
-                    Log.d("QuizSetupActivity", "Category Names: $categoryNames")
+    private fun handleSpinner() {
+        // Create a list of integers from 1 to 10
+        val amounts = (1..10).toList()
 
-                    // Set up the adapter
-                    categoryAdapter = ArrayAdapter(
-                        this@QuizSetupActivity,
-                        android.R.layout.simple_spinner_item,
-                        categoryNames
-                    )
-                    categoryAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        // Set the listener for the spinner
+        binding?.numOfQuestionSpinner?.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    // Get the selected amount from the list and update the 'amount' variable
+                    amount = amounts[position]
 
-                    // Set the adapter to the Spinner
-                    category.adapter = categoryAdapter
-                } else {
-                    Toast.makeText(this@QuizSetupActivity, "Failed to load categories", Toast.LENGTH_SHORT).show()
+                    // Update the TextView with the selected amount
+                    binding?.questionCountLabel?.text = "Amount: $amount"
+                }
+
+                override fun onNothingSelected(p0: AdapterView<*>?) {
+                    // No action needed if nothing is selected
                 }
             }
 
-            override fun onFailure(call: Call<CategoryResponse>, t: Throwable) {
-                Toast.makeText(this@QuizSetupActivity, "Error: ${t.message}", Toast.LENGTH_SHORT).show()
-            }
-        })
-
-        // Fetch the string arrays from resources
-        val difficultyLevelsArray = resources.getStringArray(R.array.difficulty_levels)
-
-        // Create an ArrayAdapter for the difficulty spinner
-        val difficultyAdapter = ArrayAdapter(
+        // Create an ArrayAdapter for the spinner with the list of amounts (1-10)
+        val adapter = ArrayAdapter(
             this,
             android.R.layout.simple_spinner_item,
-            difficultyLevelsArray
-        )
+            amounts
+        ).apply {
+            setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        }
 
-        // Create an ArrayAdapter for the number of questions (1 to 10)
-        val numQuestionsArray = (1..10).map { it.toString() }.toTypedArray()
-        val numQuestionsAdapter = ArrayAdapter(
-            this,
-            android.R.layout.simple_spinner_item,
-            numQuestionsArray
-        )
+        // Set the adapter to the spinner
+        binding?.numOfQuestionSpinner?.adapter = adapter
+    }
 
-        // Set the layouts to use when the list of choices appears
-        difficultyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        numQuestionsAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
-        // Set the adapters to the Spinners
-        difficulty.adapter = difficultyAdapter
-        numQuestions.adapter = numQuestionsAdapter  // Set the adapter to the numQuestions spinner
 
-        // Set a listener to handle item selection for the category Spinner
-        category.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+    private fun handleCategorySpinner() {
+        binding?.topicSpinner?.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    position: Int,
+                    id: Long
+                ) {
+                    category = if (position == 0)
+                        null
+                    else
+                        position + 8
+                }
+
+                override fun onNothingSelected(p0: AdapterView<*>?) {
+                    // Nothing to do here
+                }
+
+            }
+    }
+
+    private fun handleDifficultySpinner() {
+        val difficulties = listOf(null, "easy", "medium", "hard")
+
+        binding?.difficultySpinner?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                difficulty = difficulties[position]
+            }
+
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                text.text = "Please Select a Category"
-            }
-
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                val selectedCategory = parent?.getItemAtPosition(position).toString()
-                text.text = "Category Selected: $selectedCategory"
+                difficulty = null
             }
         }
+    }
 
-        // Set a listener to handle item selection for the difficulty Spinner
-        difficulty.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+
+    private fun handleTypeSpinner() {
+        val typeOptions = listOf(null, "multiple", "boolean")
+
+        binding?.questionTypeSpinner?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                type = typeOptions[position]
+            }
+
             override fun onNothingSelected(parent: AdapterView<*>?) {
-                text.text = "Please Select a Difficulty Level"
-            }
-
-            override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
-            ) {
-                val selectedDifficulty = parent?.getItemAtPosition(position).toString()
-                text.text = "Difficulty Selected: $selectedDifficulty"
+                type = null
             }
         }
+    }
 
-        // Set the OnClickListener for the Start button
-        startButton.setOnClickListener {
-            // Get the selected category, difficulty, and number of questions values
-            val selectedCategory = category.selectedItem.toString()
-            val selectedDifficulty = difficulty.selectedItem.toString()
-            val selectedNumQuestions = numQuestions.selectedItem.toString()
 
-            // Validate inputs
-            if (selectedCategory.isEmpty() || selectedDifficulty.isEmpty() || selectedNumQuestions.isEmpty()) {
-                Toast.makeText(this, "Please select all required fields!", Toast.LENGTH_SHORT).show()
-                return@setOnClickListener
-            }
-
-            // Pass the selected data to the QuizActivity
-            val intent = Intent(this, QuizActivity::class.java)
-            intent.putExtra("CATEGORY", selectedCategory)
-            intent.putExtra("DIFFICULTY", selectedDifficulty)
-            intent.putExtra("NUM_QUESTIONS", selectedNumQuestions.toInt())  // Pass number of questions
-
-            // Start the QuizActivity
-            startActivity(intent)
-        }
+    private fun getSpinnerAdapter(list: List<String>): SpinnerAdapter {
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, list)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        return adapter
     }
 }

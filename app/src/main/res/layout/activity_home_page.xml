@@ -79,7 +79,7 @@
             android:layout_marginEnd="5dp"
             android:layout_weight="1"
             android:background="@drawable/blue_solid_button_bg"
-            android:text="Random Quiz"
+            android:text="Random Topic Quiz"
             android:textColor="@color/white"
             android:textAllCaps="false"
             android:textSize="20sp"
@@ -92,37 +92,11 @@
             android:layout_marginStart="5dp"
             android:layout_weight="1"
             android:background="@drawable/blue_solid_button_bg"
-            android:text="Custom Quiz"
+            android:text="Customise Quiz"
             android:textColor="@color/white"
             android:textAllCaps="false"
             android:textSize="20sp"
             android:textStyle="bold" />
     </LinearLayout>
 
-    <!-- 'Let's Play' TextView -->
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:text="Let's Play"
-        android:textSize="32sp"
-        android:textStyle="bold"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/linearLayoutButton" />
-
-    <!-- Category RecyclerView -->
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_categoryList"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="20dp"
-        tools:listitem="@layout/category_list_item"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/textView" />
 </androidx.constraintlayout.widget.ConstraintLayout>

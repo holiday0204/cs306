@@ -8,10 +8,7 @@ import android.view.View.OnClickListener
 import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.example.assignment1.Constants
 import com.example.assignment1.databinding.ActivityQuizBinding
-import com.example.assignment1.FireBaseClass
-import com.example.assignment1.ResultModel
 
 class QuizActivity : AppCompatActivity() {
     private var binding:ActivityQuizBinding? = null
@@ -55,28 +52,29 @@ class QuizActivity : AppCompatActivity() {
     }
 
     private fun onNext() {
+        // Store the result for the current question
         val resultModel = ResultModel(
-            20-timeLeft,
+            20 - timeLeft,  // Time remaining as a score for this question
             questionList[position].type,
             questionList[position].difficulty,
             score
         )
-        resultList.add(resultModel)
-        score = 0.0
-        if (position<questionList.size-1)
-        {
+        resultList.add(resultModel) // Add the result to the list
+        score = 0.0  // Reset score for the next question
+
+        if (position < questionList.size - 1) {
+            // Move to the next question
             timer?.cancel()
             position++
             setQuestion()
             setOptions()
-            binding?.pbProgress?.progress = position+1
-            binding?.tvProgress?.text = "${position+1}/${questionList.size}"
+            binding?.pbProgress?.progress = position + 1
+            binding?.tvProgress?.text = "${position + 1}/${questionList.size}"
             resetButtonBackground()
             allowPlaying = true
             startTimer()
-        }
-        else
-        {
+        } else {
+            // End the game and go to the result screen
             endGame()
         }
     }
@@ -109,29 +107,79 @@ class QuizActivity : AppCompatActivity() {
         }
     }
 
-    private fun setScore(button: Button?)
-    {
-        if (correctAnswer==button?.text)
-            score = getScore()
+    private fun setScore(button: Button?) {
+        // Check if the answer is correct
+        if (correctAnswer == button?.text) {
+            score = getScore() // Only calculate the score if the answer is correct
+        } else {
+            score = 0.0 // If the answer is incorrect, set the score to 0
+        }
     }
 
-    private fun getScore():Double
-    {
-        val score1 = when(questionList[position].type){
-            "boolean"-> 0.5
-            else -> 1.0
-        }
+    private fun getScore(): Double {
+        // Base score: 1.0 for correct answer, 0.0 for incorrect
+        val baseScore = if (correctAnswer == optionList.first { it == correctAnswer }) 1.0 else 0.0
 
-        val score2:Double = (timeLeft.toDouble())/(20).toDouble()
-        val score3 = when(questionList[position].difficulty)
-        {
-            "easy"-> 1.0
-            "medium"-> 2.0
-            else-> 3.0
-        }
+        // Time bonus: If finished on time, give a 5% bonus (0.05 of the score)
+        val timeBonus = if (timeLeft > 0) 0.05 else 0.0  // Bonus is 5% if there's still time left
 
-        return score1+score2+score3
+        // Calculate the final score as a percentage (base score + time bonus)
+        return (baseScore + timeBonus) * 100  // 100 to express as percentage
     }
+
+
+
+//    private fun setScore(button: Button?)
+//    {
+//        if (correctAnswer==button?.text)
+//            score = getScore()
+//    }
+
+//    private fun setScore(button: Button?) {
+//        if (correctAnswer == button?.text) {
+//            score = getScore() // Only calculate the score if the answer is correct
+//        } else {
+//            score = 0.0 // If the answer is incorrect, set the score to 0
+//        }
+//    }
+//
+//
+//    private fun getScore(): Double {
+//        // Base score for correct answer (1.0) or incorrect answer (0.0)
+//        val baseScore = if (correctAnswer == optionList.first { it == correctAnswer }) 1.0 else 0.0
+//
+//        // Time bonus (calculate the time-based bonus, but it should not be the only factor for correctness)
+//        val timeBonus = timeLeft.toDouble() / 20.0  // Maximum time bonus is 1.0 if answered quickly.
+//
+//        // Difficulty multiplier (difficulty affects the score of the question)
+//        val difficultyMultiplier = when (questionList[position].difficulty) {
+//            "easy" -> 1.0
+//            "medium" -> 2.0
+//            else -> 3.0
+//        }
+//
+//        // Final score (Base score + time bonus + difficulty multiplier)
+//        return (baseScore + timeBonus) * difficultyMultiplier
+//    }
+
+
+//    private fun getScore():Double
+//    {
+//        val score1 = when(questionList[position].type){
+//            "boolean"-> 0.5
+//            else -> 1.0
+//        }
+//
+//        val score2:Double = (timeLeft.toDouble())/(20).toDouble()
+//        val score3 = when(questionList[position].difficulty)
+//        {
+//            "easy"-> 1.0
+//            "medium"-> 2.0
+//            else-> 3.0
+//        }
+//
+//        return score1+score2+score3
+//    }
 
     private fun showCorrectAnswer()
     {
@@ -154,30 +202,35 @@ class QuizActivity : AppCompatActivity() {
         binding?.option4?.background = grayBg
     }
 
-    private fun startTimer()
-    {
+    private fun startTimer() {
         binding?.circularProgressBar?.max = 20
         binding?.circularProgressBar?.progress = 20
-        timer = object :CountDownTimer(20000,1000){
+        timer = object : CountDownTimer(20000, 1000) {
             override fun onTick(remaining: Long) {
+                // Update progress bar and timer text
                 binding?.circularProgressBar?.incrementProgressBy(-1)
-                binding?.tvTimer?.text = (remaining/1000).toString()
-                timeLeft = (remaining/1000).toInt()
+                binding?.tvTimer?.text = (remaining / 1000).toString()
+                timeLeft = (remaining / 1000).toInt()
             }
 
             override fun onFinish() {
                 showCorrectAnswer()
                 allowPlaying = false
             }
-
         }.start()
     }
 
-    private fun endGame()
-    {
-        val intent = Intent(this,ResultActivity::class.java)
-        intent.putExtra("resultList",resultList)
+
+    private fun endGame() {
+        // Calculate the total score at the end of the quiz
+        val finalScore = resultList.sumByDouble { it.score }  // Sum the scores for all questions
+
+        // Pass the result list and final score to the ResultActivity
+        val intent = Intent(this, ResultActivity::class.java)
+        intent.putParcelableArrayListExtra("resultList", resultList)
+        intent.putExtra("finalScore", finalScore)
         startActivity(intent)
-        finish()
+        finish() // Close the quiz activity
     }
+
 }

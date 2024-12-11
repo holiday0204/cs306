@@ -40,79 +40,79 @@ object Constants {
     {
         val list = ArrayList<CategoryModel>()
         list.add(
-            CategoryModel("9", R.drawable.general_knowledge, "General Knowledge")
+            CategoryModel("9", "General Knowledge")
         )
         list.add(
-//            CategoryModel("10",R.drawable.books,"Books")
-//        )
-//        list.add(
-//            CategoryModel("11",R.drawable.movies,"Film")
-//        )
-//        list.add(
-//            CategoryModel("12",R.drawable.music,"Music")
-//        )
-//        list.add(
-//            CategoryModel("13",R.drawable.musicals,"Musicals & Theatres")
-//        )
-//        list.add(
-//            CategoryModel("14",R.drawable.television,"Television")
-//        )
-//        list.add(
-//            CategoryModel("15",R.drawable.video_games,"Video Games")
-//        )
-//        list.add(
-//            CategoryModel("16",R.drawable.board_game,"Board Games")
-//        )
-//        list.add(
-//            CategoryModel("17",R.drawable.science,"Science & Nature")
-//        )
-//        list.add(
-//            CategoryModel("18",R.drawable.computer,"Computer")
-//        )
-//        list.add(
-//            CategoryModel("19",R.drawable.maths,"Mathematics")
-//        )
-//        list.add(
-//            CategoryModel("20",R.drawable.mythology,"Mythology")
-//        )
-//        list.add(
-//            CategoryModel("21",R.drawable.sport,"Sports")
-//        )
-//        list.add(
-//            CategoryModel("22",R.drawable.geography,"Geography")
-//        )
-//        list.add(
-//            CategoryModel("23",R.drawable.history,"History")
-//        )
-//        list.add(
-//            CategoryModel("24",R.drawable.politics,"Politics")
-//        )
-//        list.add(
-//            CategoryModel("25",R.drawable.art,"Art")
-//        )
-//        list.add(
-//            CategoryModel("26",R.drawable.celebrity,"Celebrities")
-//        )
-//        list.add(
-//            CategoryModel("27",R.drawable.animals,"Animals")
-//        )
-//        list.add(
-//            CategoryModel("28",R.drawable.vehicles,"Vehicles")
-//        )
-//        list.add(
-//            CategoryModel("29",R.drawable.comic,"Comics")
-//        )
-//        list.add(
-//            CategoryModel("30",R.drawable.gadgets,"Gadgets")
-//        )
-//        list.add(
-//            CategoryModel("31",R.drawable.anime,"Anime & Manga")
-//        )
-//
-//        list.add(
-//            CategoryModel("32",R.drawable.cartoon,"Cartoons & Animations")
-//        )
-        return list)
+            CategoryModel("10","Books")
+        )
+        list.add(
+            CategoryModel("11","Film")
+        )
+        list.add(
+            CategoryModel("12","Music")
+        )
+        list.add(
+            CategoryModel("13","Musicals & Theatres")
+        )
+        list.add(
+            CategoryModel("14","Television")
+        )
+        list.add(
+            CategoryModel("15","Video Games")
+        )
+        list.add(
+            CategoryModel("16","Board Games")
+        )
+        list.add(
+            CategoryModel("17","Science & Nature")
+        )
+        list.add(
+            CategoryModel("18","Computer")
+        )
+        list.add(
+            CategoryModel("19","Mathematics")
+        )
+        list.add(
+            CategoryModel("20","Mythology")
+        )
+        list.add(
+            CategoryModel("21","Sports")
+        )
+        list.add(
+            CategoryModel("22","Geography")
+        )
+        list.add(
+            CategoryModel("23","History")
+        )
+        list.add(
+            CategoryModel("24","Politics")
+        )
+        list.add(
+            CategoryModel("25","Art")
+        )
+        list.add(
+            CategoryModel("26","Celebrities")
+        )
+        list.add(
+            CategoryModel("27","Animals")
+        )
+        list.add(
+            CategoryModel("28","Vehicles")
+        )
+        list.add(
+            CategoryModel("29","Comics")
+        )
+        list.add(
+            CategoryModel("30","Gadgets")
+        )
+        list.add(
+            CategoryModel("31","Anime & Manga")
+        )
+
+        list.add(
+            CategoryModel("32","Cartoons & Animations")
+        )
+        return list
     }
 
     fun getRandomOptions(correctAnswer:String,incorrectAnswer:List<String>):Pair<String,List<String>>
