@@ -26,17 +26,42 @@ class FireBaseClass {
             .document(getCurrentUserId()).set(userInfo, SetOptions.merge())
     }
 
-    fun getUserInfo(callback: UserInfoCallback) {
-        val userDocument =
-            FirebaseFirestore.getInstance().collection(Constants.user).document(getCurrentUserId())
+//    fun getUserInfo(callback: UserInfoCallback) {
+//        val userDocument =
+//            FirebaseFirestore.getInstance().collection(Constants.user).document(getCurrentUserId())
+//
+//        userDocument.get().addOnSuccessListener { documentSnapshot ->
+//            val userInfo = documentSnapshot.toObject(UserModel::class.java)
+//            callback.onUserInfoFetched(userInfo)
+//        }.addOnFailureListener { e ->
+//            callback.onUserInfoFetched(null)
+//        }
+//    }
+fun getUserInfo(userId: String, callback: UserInfoCallback) {
+    // Fetch user data from Firestore
+    val db = FirebaseFirestore.getInstance()
 
-        userDocument.get().addOnSuccessListener { documentSnapshot ->
-            val userInfo = documentSnapshot.toObject(UserModel::class.java)
-            callback.onUserInfoFetched(userInfo)
-        }.addOnFailureListener { e ->
-            callback.onUserInfoFetched(null)
+    db.collection("users")
+        .document(userId)
+        .get()
+        .addOnSuccessListener { document ->
+            if (document.exists()) {
+                val userInfo = document.toObject(UserModel::class.java)
+                callback.onUserInfoFetched(userInfo) // Pass the fetched user data
+            } else {
+                callback.onUserInfoFetched(null) // No user data found
+            }
         }
+        .addOnFailureListener { e ->
+            Log.e("FireBaseClass", "Error fetching user info: $e")
+            callback.onUserInfoFetched(null) // In case of an error
+        }
+}
+
+    interface UserInfoCallback {
+        fun onUserInfoFetched(userInfo: UserModel?)
     }
+
 
     fun updateProfile(name: String?, imgUri: Uri?) {
         val userDocument = mFireStore.collection(Constants.user).document(getCurrentUserId())
@@ -75,28 +100,28 @@ class FireBaseClass {
     }
 
 
-    fun updateScore(newScore: Double) {
-        val userDocument = mFireStore.collection(Constants.user).document(getCurrentUserId())
-        getUserInfo(object : UserInfoCallback {
-            override fun onUserInfoFetched(userInfo: UserModel?) {
-                userInfo?.let {
-                    val newAllTimeScore = userInfo.allTimeScore + newScore
-                    val newWeeklyScore = userInfo.weeklyScore + newScore
-                    val newMonthlyScore = userInfo.monthlyScore + newScore
-                    userDocument.update(
-                        Constants.allTimeScore, newAllTimeScore,
-                        Constants.weeklyScore, newWeeklyScore,
-                        Constants.monthlyScore, newMonthlyScore,
-                        Constants.lastGameScore, newScore
-                    ).addOnSuccessListener {
-                        Log.e("DataUpdate", "Updated")
-                    }.addOnFailureListener {
-                        Log.e("DataUpdate", "Failed")
-                    }
-                }
-            }
-        })
-    }
+//    fun updateScore(newScore: Double) {
+//        val userDocument = mFireStore.collection(Constants.user).document(getCurrentUserId())
+//        getUserInfo(object : UserInfoCallback {
+//            override fun onUserInfoFetched(userInfo: UserModel?) {
+//                userInfo?.let {
+//                    val newAllTimeScore = userInfo.allTimeScore + newScore
+//                    val newWeeklyScore = userInfo.weeklyScore + newScore
+//                    val newMonthlyScore = userInfo.monthlyScore + newScore
+//                    userDocument.update(
+//                        Constants.allTimeScore, newAllTimeScore,
+//                        Constants.weeklyScore, newWeeklyScore,
+//                        Constants.monthlyScore, newMonthlyScore,
+//                        Constants.lastGameScore, newScore
+//                    ).addOnSuccessListener {
+//                        Log.e("DataUpdate", "Updated")
+//                    }.addOnFailureListener {
+//                        Log.e("DataUpdate", "Failed")
+//                    }
+//                }
+//            }
+//        })
+//    }
 
     fun getUserRank(type: String, callback: UserRankCallback) {
         var rank: Int? = null
@@ -135,13 +160,11 @@ class FireBaseClass {
         var currentUserId = ""
         if (currentUser != null) {
             currentUserId = currentUser.uid
+            Log.d("FireBaseClass", "Current user UID: $currentUserId")
+        } else {
+            Log.d("FireBaseClass", "No user is signed in")  // Log if no user is signed in
         }
         return currentUserId
-    }
-
-
-    interface UserInfoCallback {
-        fun onUserInfoFetched(userInfo: UserModel?)
     }
 
     interface UserRankCallback {

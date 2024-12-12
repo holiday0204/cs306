@@ -73,7 +73,7 @@ class QuizActivity : AppCompatActivity() {
             correctAnswer = currentQuestion.correct_answer,  // Pass the correct answer
             selectedAnswer = selectedAnswer,  // Pass the user's selected answer
             isCorrect = selectedAnswer == currentQuestion.correct_answer,  // Check if the user's selected answer is correct
-            time = 20 - timeLeft,  // Time remaining as a score for this question
+            time = (20 - timeLeft).toLong(),  // Time remaining as a score for this question
             score = score,  // Score for this question
             timeBonus = 0.0  // Assuming no timeBonus for now, adjust if needed
         )

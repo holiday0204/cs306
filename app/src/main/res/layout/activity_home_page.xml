@@ -99,4 +99,19 @@
             android:textStyle="bold" />
     </LinearLayout>
 
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btnViewQuizHistory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:background="@drawable/blue_solid_button_bg"
+        android:text="View Quiz History"
+        android:textColor="@color/white"
+        android:textAllCaps="false"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/linearLayoutButton" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

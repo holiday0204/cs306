@@ -28,44 +28,42 @@ class HomePageActivity : AppCompatActivity() {
 
         auth = Firebase.auth
 
-        // Fetch and set the user name and profile image from Firebase
-        FireBaseClass().getUserInfo(object : FireBaseClass.UserInfoCallback {
-            override fun onUserInfoFetched(userInfo: UserModel?) {
-                binding.tvUserName.text = "Hi, " + userInfo?.name
-                FireBaseClass().setProfileImage(userInfo?.image, binding.mainProfileImage)
-            }
-        })
+        // Ensure user is signed in
+        val user = FirebaseAuth.getInstance().currentUser
+        if (user != null) {
+            // User is signed in, fetch their info
+            FireBaseClass().getUserInfo(user.uid, object : FireBaseClass.UserInfoCallback {
+                override fun onUserInfoFetched(userInfo: UserModel?) {
+                    if (userInfo != null) {
+                        // Update UI with user's info
+                        binding.tvUserName.text = "Hi, ${userInfo.name}"
+                        FireBaseClass().setProfileImage(userInfo.image, binding.mainProfileImage)
+                    } else {
+                        // In case user info is not fetched correctly, show Guest
+                        binding.tvUserName.text = "Hi, Guest"
+                    }
+                }
+            })
+        } else {
+            // If no user is signed in, show Guest
+            binding.tvUserName.text = "Hi, Guest"
+        }
 
-        // Button for random quiz
+        // Button actions
         binding.btnRandomQuiz.setOnClickListener {
             startActivity(Intent(this, RandomQuestionActivity::class.java))
         }
 
-        // Button for custom quiz
         binding.btnCustomQuiz.setOnClickListener {
             startActivity(Intent(this, QuizSetupActivity::class.java))
         }
 
         binding.settingsButton.setOnClickListener {
-
-            startActivity(Intent(this, SettingActivity ::class.java))
+            startActivity(Intent(this, SettingActivity::class.java))
         }
 
-        fun fetchUserDetails() {
-
-            FireBaseClass().getUserInfo(object : FireBaseClass.UserInfoCallback {
-                override fun onUserInfoFetched(userInfo: UserModel?) {
-                    if (userInfo != null) {
-                        binding.tvUserName.text = "Hi, ${userInfo.name}"
-
-                        FireBaseClass().setProfileImage(userInfo.image, binding.mainProfileImage)
-                    } else {
-                        binding.tvUserName.text = "Hi, Guest"
-                    }
-                }
-            })
+        binding.btnViewQuizHistory.setOnClickListener {
+            startActivity(Intent(this, QuizHistoryActivity::class.java))
         }
-
-        fetchUserDetails()
     }
 }

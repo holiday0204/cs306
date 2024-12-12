@@ -17,15 +17,17 @@ class QuizHistoryAdapter(
         fun bind(history: QuizHistory) {
             // Format and display the date
             binding.tvDate.text = "Date: ${formatDate(history.date)}"
+
             // Display the score
             binding.tvScore.text = "Score: ${history.score} / ${history.totalQuestions}"
 
-            // Handle click to show detailed summary
+            // Click listener to open detailed quiz results
             binding.root.setOnClickListener {
                 onItemClick(history)
             }
         }
     }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryViewHolder {
         val binding = ItemQuizHistoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
