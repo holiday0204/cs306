@@ -1,7 +1,9 @@
 package com.example.assignment1
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
@@ -15,8 +17,8 @@ import com.example.assignment1.QuizClass
 
 class QuizSetupActivity : AppCompatActivity() {
 
-
-    private var binding: ActivityQuizSetupBinding? = null
+    private lateinit var binding: ActivityQuizSetupBinding
+//    private var binding: ActivityQuizSetupBinding? = null
     private var amount = 10
     private var category: Int? = null
     private var difficulty: String? = null
@@ -25,6 +27,13 @@ class QuizSetupActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityQuizSetupBinding.inflate(layoutInflater)
         setContentView(binding?.root)
+
+        val toolbar = binding.materialToolbar
+        setSupportActionBar(toolbar)
+
+        // Enable the "up" button (back button)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
 
         handleSpinner()
 
@@ -40,6 +49,19 @@ class QuizSetupActivity : AppCompatActivity() {
         val quizClass = QuizClass(this)
         binding?.startButton?.setOnClickListener {
             quizClass.getQuizList(amount, category, difficulty, type)
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            android.R.id.home -> {
+                // Navigate to the Home Page when the up button is pressed
+                val intent = Intent(this, HomePageActivity::class.java)
+                startActivity(intent)
+                finish() // Optionally finish this activity
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 

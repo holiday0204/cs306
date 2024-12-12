@@ -21,56 +21,68 @@ import com.google.firebase.storage.FirebaseStorage
 class FireBaseClass {
     private val mFireStore = FirebaseFirestore.getInstance()
 
-    fun registerUser(userInfo: UserModel) {
-        mFireStore.collection(Constants.user)
-            .document(getCurrentUserId()).set(userInfo, SetOptions.merge())
+    fun getUserInfo(email: String, callback: UserInfoCallback) {
+        val db = FirebaseFirestore.getInstance()
+        val usersCollection = db.collection("users")
+
+        // Fetch the user document using the email
+        usersCollection.document(email).get()
+            .addOnSuccessListener { documentSnapshot ->
+                if (documentSnapshot.exists()) {
+                    // Convert Firestore document to UserModel
+                    val userInfo = documentSnapshot.toObject(UserModel::class.java)
+                    callback.onUserInfoFetched(userInfo)
+                } else {
+                    callback.onUserInfoFetched(null)
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.e("FirebaseError", "Error fetching user info", exception)
+                callback.onUserInfoFetched(null)
+            }
     }
 
-//    fun getUserInfo(callback: UserInfoCallback) {
-//        val userDocument =
-//            FirebaseFirestore.getInstance().collection(Constants.user).document(getCurrentUserId())
+//fun getUserInfo(email: String, callback: UserInfoCallback) {
+//    // Fetch user data from Firestore
+//    val db = FirebaseFirestore.getInstance()
 //
-//        userDocument.get().addOnSuccessListener { documentSnapshot ->
-//            val userInfo = documentSnapshot.toObject(UserModel::class.java)
-//            callback.onUserInfoFetched(userInfo)
-//        }.addOnFailureListener { e ->
-//            callback.onUserInfoFetched(null)
+//    db.collection("users")
+//        .whereEqualTo("email", email)  // Query documents by email instead of userId
+//        .get()
+//        .addOnSuccessListener { querySnapshot ->
+//            for (document in querySnapshot.documents) {
+//                // Assuming there's only one document per email, you can use the first one
+//                val userInfo = document.toObject(UserModel::class.java)
+//                callback.onUserInfoFetched(userInfo) // Pass the fetched user data
+//                return@addOnSuccessListener
+//            }
+//            callback.onUserInfoFetched(null) // No user data found for the given email
 //        }
-//    }
-fun getUserInfo(userId: String, callback: UserInfoCallback) {
-    // Fetch user data from Firestore
-    val db = FirebaseFirestore.getInstance()
-
-    db.collection("users")
-        .document(userId)
-        .get()
-        .addOnSuccessListener { document ->
-            if (document.exists()) {
-                val userInfo = document.toObject(UserModel::class.java)
-                callback.onUserInfoFetched(userInfo) // Pass the fetched user data
-            } else {
-                callback.onUserInfoFetched(null) // No user data found
-            }
-        }
-        .addOnFailureListener { e ->
-            Log.e("FireBaseClass", "Error fetching user info: $e")
-            callback.onUserInfoFetched(null) // In case of an error
-        }
-}
+//        .addOnFailureListener { e ->
+//            Log.e("FireBaseClass", "Error fetching user info: $e")
+//            callback.onUserInfoFetched(null) // In case of an error
+//        }
+//}
 
     interface UserInfoCallback {
         fun onUserInfoFetched(userInfo: UserModel?)
     }
 
 
-    fun updateProfile(name: String?, imgUri: Uri?) {
-        val userDocument = mFireStore.collection(Constants.user).document(getCurrentUserId())
-        if (!name.isNullOrEmpty()) {
-            userDocument.update("name", name)
-        }
-        if (imgUri != null) {
-            uploadImage(imgUri)
-        }
+    fun updateProfile(name: String?, imgUri: Uri?, email: String) {
+        mFireStore.collection(Constants.user)
+            .whereEqualTo("email", email)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                for (document in querySnapshot.documents) {
+                    if (!name.isNullOrEmpty()) {
+                        document.reference.update("name", name)
+                    }
+                    if (imgUri != null) {
+                        uploadImage(imgUri, email)
+                    }
+                }
+            }
     }
 
     fun setProfileImage(imageRef: String?, view: ShapeableImageView) {
@@ -85,14 +97,15 @@ fun getUserInfo(userId: String, callback: UserInfoCallback) {
         }
     }
 
-    private fun uploadImage(imgUri: Uri) {
-        val userDocument = mFireStore.collection(Constants.user).document(getCurrentUserId())
+    private fun uploadImage(imgUri: Uri, email: String) {
         val storageRef = FirebaseStorage.getInstance().reference
-        val profilePicRef = storageRef.child("profile_pictures/${getCurrentUserId()}")
+        val profilePicRef = storageRef.child("profile_pictures/$email")
         val uploadTask = profilePicRef.putFile(imgUri)
         uploadTask.addOnCompleteListener { task ->
             if (task.isSuccessful) {
-                userDocument.update("image", "profile_pictures/${getCurrentUserId()}")
+                val downloadUrl = task.result.storage.downloadUrl
+                val userDocument = mFireStore.collection(Constants.user).document(email)
+                userDocument.update("image", downloadUrl.toString())
             } else {
                 Log.e("ImageUpload", "Unsuccessful")
             }
@@ -123,19 +136,18 @@ fun getUserInfo(userId: String, callback: UserInfoCallback) {
 //        })
 //    }
 
-    fun getUserRank(type: String, callback: UserRankCallback) {
-        var rank: Int? = null
+    fun getUserRank(type: String, email: String, callback: UserRankCallback) {
         mFireStore.collection(Constants.user).orderBy(type, Query.Direction.DESCENDING)
             .get().addOnSuccessListener { result ->
-                rank = 1
-                val usrId = getCurrentUserId()
+                var rank = 1
                 for (document in result) {
-                    if (document.id == usrId)
+                    if (document.id == email)
                         break
-                    rank = rank!! + 1
+                    rank += 1
                 }
                 callback.onUserRankFetched(rank)
-            }.addOnFailureListener {
+            }
+            .addOnFailureListener {
                 Log.e("QueryResult", "Failure")
                 callback.onUserRankFetched(null)
             }

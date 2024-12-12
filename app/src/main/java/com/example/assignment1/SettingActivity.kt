@@ -4,8 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
+import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import com.example.assignment1.databinding.ActivitySettingBinding
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
@@ -23,6 +25,14 @@ class SettingActivity : AppCompatActivity() {
 
         // Initialize FirebaseAuth instance
         auth = Firebase.auth
+        // Setup the toolbar as the action bar
+        val toolbar: Toolbar = findViewById(R.id.materialToolbar)
+        setSupportActionBar(toolbar)
+
+        // Enable the "up" button (back button)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setDisplayShowHomeEnabled(true)
+
 
         binding.SignOutButton.setOnClickListener {
             // Sign out the user from Firebase
@@ -72,6 +82,17 @@ class SettingActivity : AppCompatActivity() {
                     }
                 }
             }
+        }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> {
+                // Go back to the previous activity when the up button (back button) is pressed
+                onBackPressed() // This is the default action to go back
+                return true
+            }
+            else -> return super.onOptionsItemSelected(item)
         }
     }
 

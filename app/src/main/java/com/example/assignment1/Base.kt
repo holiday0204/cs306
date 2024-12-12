@@ -21,12 +21,12 @@ object Base {
         Toast.makeText(context,msg,Toast.LENGTH_SHORT).show()
     }
 
-    fun desiredScore(userInfo: UserModel, type: String):Double{
-        return when(type){
-            Constants.allTimeScore-> userInfo.allTimeScore
-            Constants.weeklyScore->userInfo.weeklyScore
-            Constants.monthlyScore->userInfo.monthlyScore
-            else -> 0.0
-        }
-    }
+//    fun desiredScore(userInfo: UserModel, type: String):Double{
+//        return when(type){
+//            Constants.allTimeScore-> userInfo.allTimeScore
+//            Constants.weeklyScore->userInfo.weeklyScore
+//            Constants.monthlyScore->userInfo.monthlyScore
+//            else -> 0.0
+//        }
+//    }
 }

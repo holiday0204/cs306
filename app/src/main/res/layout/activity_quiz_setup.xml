@@ -4,8 +4,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp">
+    android:background="@color/lavender"
+    android:layout_height="match_parent">
+
+    <!-- Material Toolbar -->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/materialToolbar"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/deep_purple"
+        app:titleTextColor="@color/white"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!-- Difficulty Selection -->
     <TextView
@@ -15,7 +24,7 @@
         android:layout_marginTop="16dp"
         android:text="@string/difficulty_label"
         android:textSize="18sp"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/materialToolbar"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Spinner
@@ -71,7 +80,6 @@
         app:layout_constraintTop_toBottomOf="@id/questionTypeLabel"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
-
 
     <!-- Question Count Selection -->
     <TextView

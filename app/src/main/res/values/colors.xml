@@ -15,6 +15,18 @@
     <color name="dark_yellow">#D8D6A3</color>
     <color name="light_gray">#D3D3D3</color>
     <color name="dark_gray">#505050</color>
+    <color name="light_green">#C8E6C9
+    </color>
+
+    <color name="lavender">#E6E6FA</color>
+    <color name="indigo">#4B0082</color>
+    <color name="violet">#EE82EE</color>
+    <color name="deep_purple">#673AB7</color>
+    <color name="light_purple">#E6E6FA</color>  <!-- Lavender -->
+    <color name="thistle">#D8BFD8</color>       <!-- Thistle -->
+    <color name="mauve">#E0B0FF</color>         <!-- Mauve -->
+    <color name="plum">#DDA0DD</color>          <!-- Plum -->
+    <color name="pale_violet_red">#DB7093</color>
 
     <!-- Error Color -->
     <color name="soft_red">#FF6347</color> <!-- Example error color -->

@@ -24,7 +24,7 @@ class QuizSummaryAdapter(
             binding.tvCorrectAnswer.text = "Correct Answer: ${result.correctAnswer}"
 
             // Indicate if the answer was correct or incorrect
-            binding.tvResultStatus.text = if (result.isCorrect) {
+            binding.tvResultStatus.text = if (result.correct) {
                 "Result: Correct"
             } else {
                 "Result: Incorrect"

@@ -4,70 +4,41 @@ import android.os.Parcel
 import android.os.Parcelable
 
 data class ResultModel(
-    var question: String,
-    var correctAnswer: String,
-    var selectedAnswer: String,
-    var isCorrect: Boolean,
-    var time: Long = 0L,
-    var score: Double,
-    var timeBonus: Double = 0.0
+    val question: String = "",
+    val selectedAnswer: String = "",
+    val correctAnswer: String = "",
+    val correct: Boolean = false,
+    val score: Double = 0.0,  // Ensure score is a Double
+    val time: Int = 0,
+    val stability: Int = 0,
+    val timeBonus: Int = 0
 ) : Parcelable {
-
     constructor(parcel: Parcel) : this(
         parcel.readString() ?: "",
         parcel.readString() ?: "",
         parcel.readString() ?: "",
         parcel.readByte() != 0.toByte(),
-        parcel.readLong(),
-        parcel.readDouble(),
-        parcel.readDouble()
+        parcel.readDouble(),  // Read score as Double
+        parcel.readInt(),
+        parcel.readInt(),
+        parcel.readInt()
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(question)
-        parcel.writeString(correctAnswer)
         parcel.writeString(selectedAnswer)
-        parcel.writeByte(if (isCorrect) 1 else 0)
-        parcel.writeLong(time)
-        parcel.writeDouble(score)
-        parcel.writeDouble(timeBonus)
+        parcel.writeString(correctAnswer)
+        parcel.writeByte(if (correct) 1 else 0)
+        parcel.writeDouble(score)  // Write score as Double
+        parcel.writeInt(time)
+        parcel.writeInt(stability)
+        parcel.writeInt(timeBonus)
     }
 
     override fun describeContents(): Int = 0
 
     companion object CREATOR : Parcelable.Creator<ResultModel> {
-        override fun createFromParcel(parcel: Parcel): ResultModel {
-            return ResultModel(parcel)
-        }
-
-        override fun newArray(size: Int): Array<ResultModel?> {
-            return arrayOfNulls(size)
-        }
+        override fun createFromParcel(parcel: Parcel) = ResultModel(parcel)
+        override fun newArray(size: Int) = arrayOfNulls<ResultModel>(size)
     }
-    fun ResultModel.toMap(): Map<String, Any> {
-        return mapOf(
-            "question" to this.question,
-            "correctAnswer" to this.correctAnswer,
-            "selectedAnswer" to this.selectedAnswer,
-            "isCorrect" to this.isCorrect,
-            "time" to this.time,
-            "score" to this.score,
-            "timeBonus" to this.timeBonus
-        )
-    }
-
-    fun fromMap(map: Map<String, Any>): ResultModel {
-        return ResultModel(
-            question = map["question"] as? String ?: "", // Safe cast to String with default empty value
-            correctAnswer = map["correctAnswer"] as? String ?: "",
-            selectedAnswer = map["selectedAnswer"] as? String ?: "",
-            isCorrect = map["isCorrect"] as? Boolean ?: false,  // Safe cast to Boolean with default value
-            time = map["time"] as? Long ?: 0L,  // Safe cast to Long with default value
-            score = map["score"] as? Double ?: 0.0, // Safe cast to Double with default value
-            timeBonus = map["timeBonus"] as? Double ?: 0.0 // Safe cast to Double with default value
-        )
-    }
-
-
-
 }

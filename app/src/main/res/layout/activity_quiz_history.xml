@@ -1,16 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/lavender"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".QuizHistoryActivity">
 
     <!-- App Bar / Toolbar -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="@color/soft_blue"
-        android:title="Quiz History"
-        android:titleTextColor="@android:color/white" />
+        android:background="@color/deep_purple"
+        app:titleTextColor="@color/white"
+        android:title="Quiz History" />
 
     <!-- RecyclerView below the Toolbar -->
     <androidx.recyclerview.widget.RecyclerView
@@ -18,6 +22,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/toolbar"
-        android:padding="16dp" />
+        android:padding="16dp"
+        android:visibility="visible"/>
+
+    <TextView
+        android:id="@+id/tvEmptyState"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rvQuizHistory"
+        android:layout_centerHorizontal="true"
+        android:text="No quiz history available"
+        android:textSize="18sp"
+        android:textColor="@android:color/darker_gray"
+        android:visibility="gone"
+        android:padding="16dp"/>
 
 </RelativeLayout>

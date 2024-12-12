@@ -10,7 +10,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import androidx.appcompat.app.AppCompatActivity
 import com.example.assignment1.databinding.ActivitySignUpBinding
 import com.google.firebase.auth.FirebaseAuth
-import org.mindrot.jbcrypt.BCrypt
 
 class SignUpActivity : AppCompatActivity() {
 
@@ -39,39 +38,15 @@ class SignUpActivity : AppCompatActivity() {
                 auth.createUserWithEmailAndPassword(email, password)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
-                            val userId = FirebaseAuth.getInstance().currentUser?.uid
-                            if (userId != null) {
-                                // Hash the password before storing it
-                                val hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt())
-                                val dob = binding.editTextRegisterDob.text.toString()
-
-                                val selectedGenderId = binding.radioGroupGender.checkedRadioButtonId
-                                val gender = when (selectedGenderId) {
-                                    R.id.radioMale -> "Male"
-                                    R.id.radioFemale -> "Female"
-                                    R.id.radioOther -> "Other"
-                                    else -> "" // Default empty if no gender is selected
-                                }
-
-                                // Create a user HashMap with values of type Any
-                                val user = hashMapOf<String, Any>(
-                                    "email" to email,
-                                    "password" to hashedPassword,  // Store hashed password
-                                    "userId" to userId,
-                                    "name" to accountName,
-                                    "gender" to gender,
-                                    "dob" to dob,
-                                    "createdAt" to System.currentTimeMillis()
-                                )
-                                Log.d(TAG, "User to be saved: $user")
-                                saveUserToFirestore(userId, user)
-                            } else {
-                                Toast.makeText(
-                                    this,
-                                    "Error: User ID is null",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
+                            val user = hashMapOf<String, Any>(
+                                "email" to email,
+                                "name" to accountName,
+                                "gender" to getGender(),
+                                "dob" to binding.editTextRegisterDob.text.toString(),
+                                "createdAt" to System.currentTimeMillis()
+                            )
+                            Log.d(TAG, "User to be saved: $user")
+                            saveUserToFirestore(email, user)
                         } else {
                             // Account creation failed
                             Log.e(TAG, "SignUpError: ${task.exception}")
@@ -87,13 +62,13 @@ class SignUpActivity : AppCompatActivity() {
     }
 
     // Function to save user data to Firestore (now outside onCreate)
-    private fun saveUserToFirestore(userId: String, user: HashMap<String, Any>) {
-        // Add the user to the `users` collection with the userId as the document ID
+    private fun saveUserToFirestore(email: String, user: HashMap<String, Any>) {
+        // Add the user to the `users` collection with the email as the document ID
         firestore.collection("users")
-            .document(userId) // Use the Firebase Authentication UID as the document ID
+            .document(email) // Use the email as the document ID
             .set(user)
             .addOnSuccessListener {
-                Log.d(TAG, "User added to Firestore with ID: $userId")
+                Log.d(TAG, "User added to Firestore with email: $email")
                 Toast.makeText(this, "Account created successfully", Toast.LENGTH_SHORT).show()
                 auth.signOut()
                 val intent = Intent(this, SignInActivity::class.java)
@@ -143,5 +118,15 @@ class SignUpActivity : AppCompatActivity() {
         }
 
         return true
+    }
+
+    private fun getGender(): String {
+        val selectedGenderId = binding.radioGroupGender.checkedRadioButtonId
+        return when (selectedGenderId) {
+            R.id.radioMale -> "Male"
+            R.id.radioFemale -> "Female"
+            R.id.radioOther -> "Other"
+            else -> "" // Default empty if no gender is selected
+        }
     }
 }

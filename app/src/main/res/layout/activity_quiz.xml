@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white"
+    android:background="@color/lavender"
     tools:context=".QuizActivity">
 
     <androidx.cardview.widget.CardView
@@ -42,7 +42,7 @@
                 android:layout_marginEnd="10dp"
                 android:gravity="center"
                 android:text="5/10"
-                android:textColor="@color/soft_blue"
+                android:textColor="@color/indigo"
                 android:textSize="20dp"
                 android:textStyle="bold" />
         </LinearLayout>
@@ -57,11 +57,12 @@
         android:layout_marginEnd="20dp"
         app:layout_constraintTop_toTopOf="parent">
 
+
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="200dp"
             android:layout_marginTop="40dp"
-            app:cardBackgroundColor="@color/soft_blue"
+            app:cardBackgroundColor="@color/deep_purple"
             app:cardCornerRadius="30dp"
             app:cardElevation="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -97,6 +98,7 @@
                 android:gravity="center"
                 android:text="8"
                 android:textSize="28sp"
+                android:textColor="@color/black"
                 android:textStyle="bold" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -109,6 +111,7 @@
             android:gravity="center"
             android:textSize="24sp"
             android:textStyle="bold"
+            android:textColor="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cl_circular_progress_bar" />
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -168,8 +171,6 @@
             android:textAllCaps="false"
             android:textSize="20sp"
             android:textStyle="bold" />
-
-
     </LinearLayout>
 
     <androidx.appcompat.widget.AppCompatButton
