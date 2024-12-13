@@ -6,7 +6,7 @@ data class CategoryModel(
     val name:String,
 
 
-)
+    )
 
 data class CategoryResponse(
     val triviaCategories: List<CategoryModel>

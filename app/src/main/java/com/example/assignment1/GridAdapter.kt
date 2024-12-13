@@ -40,7 +40,7 @@ class GridAdapter(private val items: List<CategoryModel>,
     override fun getItemCount(): Int = items.size
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-//        val image:ImageView = itemView.findViewById(R.id.iv_category_icon)
+        //        val image:ImageView = itemView.findViewById(R.id.iv_category_icon)
         val tvCategoryName:TextView = itemView.findViewById(R.id.tv_Category_name)
 //        val tvQuestionCount:TextView = itemView.findViewById(R.id.tv_no_of_questions)
     }

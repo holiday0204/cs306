@@ -1,42 +1,38 @@
+
 package com.example.assignment1
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.assignment1.databinding.ItemQuizHistoryBinding
-import com.example.assignment1.utils.formatDate
 
 class QuizHistoryAdapter(
     private val historyList: List<QuizHistoryModel>,
     private val onItemClick: (QuizHistoryModel) -> Unit
-) : RecyclerView.Adapter<QuizHistoryAdapter.HistoryViewHolder>() {
+) : RecyclerView.Adapter<QuizHistoryAdapter.QuizHistoryViewHolder>() {
 
-    inner class HistoryViewHolder(private val binding: ItemQuizHistoryBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+    class QuizHistoryViewHolder(view: View) : RecyclerView.ViewHolder(view) {
+        val dateTextView: TextView = view.findViewById(R.id.tvDate)
+        val scoreTextView: TextView = view.findViewById(R.id.tvScore)
+    }
 
-        fun bind(history: QuizHistoryModel) {
-            // Format and display the date
-            binding.tvDate.text = "Date: ${formatDate(history.date)}"
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): QuizHistoryViewHolder {
+        val view = LayoutInflater.from(parent.context)
+            .inflate(R.layout.item_quiz_history, parent, false)
+        return QuizHistoryViewHolder(view)
+    }
 
-            // Display the score
-            binding.tvScore.text = "Score: ${history.score} / ${history.totalQuestions}"
+    override fun onBindViewHolder(holder: QuizHistoryViewHolder, position: Int) {
+        val history = historyList[position]
+        holder.dateTextView.text = java.text.DateFormat.getDateTimeInstance().format(history.date)
+        holder.scoreTextView.text = "Score: ${history.score}/${history.totalQuestions}"
 
-            // Click listener to open detailed quiz results
-            binding.root.setOnClickListener {
-                onItemClick(history)
-            }
+        holder.itemView.setOnClickListener {
+            onItemClick(history)
         }
     }
 
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryViewHolder {
-        val binding = ItemQuizHistoryBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return HistoryViewHolder(binding)
-    }
-
-    override fun onBindViewHolder(holder: HistoryViewHolder, position: Int) {
-        holder.bind(historyList[position])
-    }
 
     override fun getItemCount(): Int = historyList.size
 }

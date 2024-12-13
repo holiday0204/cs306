@@ -97,7 +97,7 @@ class FireBaseClass {
         }
     }
 
-    fun uploadImage(imgUri: Uri, email: String) {
+    private fun uploadImage(imgUri: Uri, email: String) {
         val storageRef = FirebaseStorage.getInstance().reference
         val profilePicRef = storageRef.child("profile_pictures/$email")
         val uploadTask = profilePicRef.putFile(imgUri)
@@ -136,4 +136,50 @@ class FireBaseClass {
 //        })
 //    }
 
+    fun getUserRank(type: String, email: String, callback: UserRankCallback) {
+        mFireStore.collection(Constants.user).orderBy(type, Query.Direction.DESCENDING)
+            .get().addOnSuccessListener { result ->
+                var rank = 1
+                for (document in result) {
+                    if (document.id == email)
+                        break
+                    rank += 1
+                }
+                callback.onUserRankFetched(rank)
+            }
+            .addOnFailureListener {
+                Log.e("QueryResult", "Failure")
+                callback.onUserRankFetched(null)
+            }
+    }
+
+    fun doesDocumentExist(documentId: String): Task<Boolean> {
+        val db = FirebaseFirestore.getInstance()
+        val documentRef = db.collection(Constants.user).document(documentId)
+
+        return documentRef.get()
+            .continueWith { task ->
+                if (task.isSuccessful) {
+                    task.result?.exists() ?: false
+                } else {
+                    false
+                }
+            }
+    }
+
+    fun getCurrentUserId(): String {
+        val currentUser = Firebase.auth.currentUser
+        var currentUserId = ""
+        if (currentUser != null) {
+            currentUserId = currentUser.uid
+            Log.d("FireBaseClass", "Current user UID: $currentUserId")
+        } else {
+            Log.d("FireBaseClass", "No user is signed in")  // Log if no user is signed in
+        }
+        return currentUserId
+    }
+
+    interface UserRankCallback {
+        fun onUserRankFetched(rank: Int?)
+    }
 }
