@@ -97,7 +97,7 @@ class FireBaseClass {
         }
     }
 
-    private fun uploadImage(imgUri: Uri, email: String) {
+    fun uploadImage(imgUri: Uri, email: String) {
         val storageRef = FirebaseStorage.getInstance().reference
         val profilePicRef = storageRef.child("profile_pictures/$email")
         val uploadTask = profilePicRef.putFile(imgUri)
