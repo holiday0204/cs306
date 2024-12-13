@@ -9,7 +9,6 @@
     android:background="@color/lavender"
     tools:context=".HomePageActivity">
 
-    <!-- MaterialToolbar - App bar at the top with Settings and Notification buttons -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/main_toolbar"
         android:layout_width="match_parent"
@@ -20,7 +19,6 @@
         app:titleTextColor="@color/white"
         tools:layout_editor_absoluteX="-20dp">
 
-        <!-- Settings Button inside Toolbar -->
         <ImageButton
             android:id="@+id/settingsButton"
             android:layout_width="wrap_content"
@@ -30,7 +28,6 @@
             android:contentDescription="Settings"
             android:src="@drawable/ic_setting" />
 
-        <!-- Notification Button inside Toolbar (next to Settings) -->
         <ImageButton
             android:id="@+id/notificationButton"
             android:layout_width="wrap_content"
@@ -50,6 +47,24 @@
         android:layout_marginEnd="20dp"
         app:layout_constraintTop_toBottomOf="@id/main_toolbar">
 
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/profileCardView"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="4dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <!-- Profile Image inside MaterialCardView -->
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/profileImageView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/ic_profilepic"
+                android:scaleType="centerCrop" />
+        </com.google.android.material.card.MaterialCardView>
+
         <!-- UserName Text with Material Design style -->
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/tvUserName"
@@ -58,18 +73,7 @@
             android:text="Hi, User"
             android:textSize="30sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@id/profileImageView"
-            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/profileImageView"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:src="@drawable/ic_profilepic"
-            android:scaleType="centerCrop"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 

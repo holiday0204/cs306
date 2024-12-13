@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.view.View
-import android.view.View.OnClickListener
 import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -22,6 +21,7 @@ class QuizActivity : AppCompatActivity() {
     private val resultList = ArrayList<ResultModel>()
     private var timeLeft = 0
     private var score = 0.0
+    private var timerValue: Int = 20
 
     // Declare a variable to hold the selected answer
     private lateinit var selectedAnswer: String
@@ -30,6 +30,8 @@ class QuizActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityQuizBinding.inflate(layoutInflater)
         setContentView(binding?.root)
+
+        timerValue = intent.getIntExtra("timer", 20)
 
         questionList = intent.getSerializableExtra("questionList") as ArrayList<QuizResult>
         binding?.pbProgress?.max = questionList.size
@@ -41,7 +43,6 @@ class QuizActivity : AppCompatActivity() {
         binding?.btnNext?.setOnClickListener {
             onNext()
         }
-
         val redBg = ContextCompat.getDrawable(this, R.drawable.red_button_bg)
         val optionClickListener = View.OnClickListener { view ->
             if (allowPlaying) {
@@ -167,14 +168,17 @@ class QuizActivity : AppCompatActivity() {
     }
 
     private fun startTimer() {
-        binding?.circularProgressBar?.max = 20
-        binding?.circularProgressBar?.progress = 20
-        timer = object : CountDownTimer(20000, 1000) {
+        // Use the passed timer value to set the maximum and initial progress
+        binding?.circularProgressBar?.max = timerValue
+        binding?.circularProgressBar?.progress = timerValue
+
+        // Create the countdown timer using the retrieved timerValue
+        timer = object : CountDownTimer((timerValue * 1000).toLong(), 1000) {
             override fun onTick(remaining: Long) {
                 // Update progress bar and timer text
                 binding?.circularProgressBar?.incrementProgressBy(-1)
                 binding?.tvTimer?.text = (remaining / 1000).toString()
-                timeLeft = (remaining / 1000).toInt()
+                timeLeft = (remaining / 1000).toInt()  // Update the time left for scoring purposes
             }
 
             override fun onFinish() {

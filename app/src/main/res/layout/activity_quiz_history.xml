@@ -7,7 +7,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".QuizHistoryActivity">
 
-    <!-- App Bar / Toolbar -->
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
@@ -16,7 +15,6 @@
         app:titleTextColor="@color/white"
         android:title="Quiz History" />
 
-    <!-- RecyclerView below the Toolbar -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvQuizHistory"
         android:layout_width="match_parent"

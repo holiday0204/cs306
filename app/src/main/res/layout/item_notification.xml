@@ -15,7 +15,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <!-- Notification Title -->
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/notificationTitle"
             android:layout_width="wrap_content"
@@ -26,7 +25,6 @@
             android:layout_marginBottom="4dp"
             android:textStyle="bold"/>
 
-        <!-- Notification Message -->
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/notificationMessage"
             android:layout_width="wrap_content"
@@ -36,7 +34,6 @@
             android:textColor="@color/dark_gray"
             android:layout_marginBottom="8dp"/>
 
-        <!-- Notification Timestamp -->
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/notificationTimestamp"
             android:layout_width="wrap_content"
