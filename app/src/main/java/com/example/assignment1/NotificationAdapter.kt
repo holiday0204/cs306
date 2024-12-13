@@ -3,14 +3,22 @@ package com.example.assignment1
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.assignment1.databinding.ItemNotificationBinding
-import java.text.SimpleDateFormat
-import java.util.*
+import com.example.assignment1.databinding.ItemNotificationBinding // Ensure this import is correct
 
-class NotificationAdapter(private val notifications: List<NotificationScoreModel>) :
+class NotificationAdapter(private val notificationsList: MutableList<Notification>) :
     RecyclerView.Adapter<NotificationAdapter.NotificationViewHolder>() {
+
+    // ViewHolder for each notification item
+    inner class NotificationViewHolder(private val binding: ItemNotificationBinding) :
+        RecyclerView.ViewHolder(binding.root) {
+
+        fun bind(notification: Notification) {
+            binding.notificationTitle.text = notification.title
+            binding.notificationMessage.text = notification.message
+            binding.notificationTimestamp.text = notification.timestamp
+        }
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotificationViewHolder {
         val binding = ItemNotificationBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -18,19 +26,8 @@ class NotificationAdapter(private val notifications: List<NotificationScoreModel
     }
 
     override fun onBindViewHolder(holder: NotificationViewHolder, position: Int) {
-        val notification = notifications[position]
-        holder.bind(notification)
+        holder.bind(notificationsList[position])
     }
 
-    override fun getItemCount(): Int = notifications.size
-
-    class NotificationViewHolder(private val binding: ItemNotificationBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-
-        fun bind(notification: NotificationScoreModel) {
-            binding.notificationTitle.text = "Quiz Score"
-            binding.notificationMessage.text = notification.result
-            binding.notificationTimestamp.text = "Score: ${notification.score}%"
-        }
-    }
+    override fun getItemCount(): Int = notificationsList.size
 }

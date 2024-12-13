@@ -1,84 +1,68 @@
 package com.example.assignment1
-
-import android.app.TimePickerDialog
+import android.app.AlarmManager
+import android.app.PendingIntent
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import android.widget.TextView
+import android.app.TimePickerDialog
+import android.widget.TimePicker
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.button.MaterialButton
 import java.util.*
-import java.util.concurrent.TimeUnit
-import androidx.work.OneTimeWorkRequestBuilder
-import androidx.work.WorkManager
-import androidx.work.workDataOf
 
 class NotificationActivity : AppCompatActivity() {
+
+    private lateinit var setTimeButton: MaterialButton
+    private lateinit var selectedTimeText: TextView
+    private lateinit var btnHomePage: MaterialButton  // Add reference for the Home Page button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_notification)
 
-        // Find views
-        val setTimeButton: MaterialButton = findViewById(R.id.setTimeButton)
-        val selectedTimeText: TextView = findViewById(R.id.selectedTimeText)
+        setTimeButton = findViewById(R.id.setTimeButton)
+        selectedTimeText = findViewById(R.id.selectedTimeText)
+        btnHomePage = findViewById(R.id.btnHomePage)  // Initialize the button
 
-        // Handle click on Set Time button
+        // Navigate back to HomePageActivity when the button is clicked
+        btnHomePage.setOnClickListener {
+            val intent = Intent(this, HomePageActivity::class.java)
+            startActivity(intent)
+        }
+
+        // Existing TimePickerDialog setup
         setTimeButton.setOnClickListener {
-            showTimePicker(selectedTimeText)
+            val calendar = Calendar.getInstance()
+            val hour = calendar.get(Calendar.HOUR_OF_DAY)
+            val minute = calendar.get(Calendar.MINUTE)
+
+            val timePickerDialog = TimePickerDialog(this, { _, selectedHour, selectedMinute ->
+                selectedTimeText.text = "Notification set for: $selectedHour:$selectedMinute"
+
+                val timeInMillis = calculateTimeInMillis(selectedHour, selectedMinute)
+                setNotificationAlarm(timeInMillis)
+            }, hour, minute, true)
+
+            timePickerDialog.show()
         }
     }
 
-    // Show the TimePickerDialog and update the TextView with the selected time
-    private fun showTimePicker(selectedTimeText: TextView) {
-        val calendar = Calendar.getInstance()
-        val hour = calendar.get(Calendar.HOUR_OF_DAY)
-        val minute = calendar.get(Calendar.MINUTE)
-
-        val timePickerDialog = TimePickerDialog(this, { _, selectedHour, selectedMinute ->
-            // When time is selected, update the TextView and schedule the notification
-            val selectedTime = String.format("%02d:%02d", selectedHour, selectedMinute)
-            selectedTimeText.text = "Notification set for: $selectedTime"
-
-            // Schedule the notification with the selected time
-            scheduleNotification(selectedHour, selectedMinute)
-        }, hour, minute, true)
-
-        timePickerDialog.show()
-    }
-
-    // Schedule the notification based on the selected time
-    private fun scheduleNotification(hour: Int, minute: Int) {
+    private fun calculateTimeInMillis(hour: Int, minute: Int): Long {
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.HOUR_OF_DAY, hour)
         calendar.set(Calendar.MINUTE, minute)
         calendar.set(Calendar.SECOND, 0)
+        return calendar.timeInMillis
+    }
 
-        val currentTime = Calendar.getInstance()
-        if (calendar.before(currentTime)) {
-            // If the selected time has already passed today, schedule it for the next day
-            calendar.add(Calendar.DAY_OF_MONTH, 1)
-        }
-
-        val delayInMillis = calendar.timeInMillis - currentTime.timeInMillis
-
-        // Create input data for WorkManager
-        val inputData = workDataOf(
-            "hour" to hour,
-            "minute" to minute,
-            "title" to "Trivia Time!", // Set the title for your notification
-            "message" to "Here is your daily trivia question!" // Set the message
-        )
-
-        // Create a OneTimeWorkRequest to schedule the notification
-        val workRequest = OneTimeWorkRequestBuilder<Notification>()
-            .setInputData(inputData)  // Pass the custom data (hour, minute, title, message)
-            .setInitialDelay(delayInMillis, TimeUnit.MILLISECONDS)  // Set the delay
-            .build()
-
-        // Enqueue the work request to trigger the notification at the scheduled time
-        WorkManager.getInstance(this).enqueue(workRequest)
-
-        // Show a Toast message to confirm the notification is scheduled
-        Toast.makeText(this, "Notification scheduled!", Toast.LENGTH_SHORT).show()
+    private fun setNotificationAlarm(timeInMillis: Long) {
+        val alarmManager = getSystemService(Context.ALARM_SERVICE) as AlarmManager
+        val intent = Intent(this, NotificationReceiver::class.java)
+        val pendingIntent = PendingIntent.getBroadcast(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, timeInMillis, pendingIntent)
     }
 }

@@ -113,33 +113,27 @@
         app:layout_constraintTop_toBottomOf="@id/numOfQuestionSpinner"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <RadioGroup
-        android:id="@+id/timeLimitRadioGroup"
+    <!-- Timer Label -->
+    <TextView
+        android:id="@+id/timerLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Select Timer (10-30s): 20s"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@id/timeLimitLabel"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <!-- SeekBar -->
+    <SeekBar
+        android:id="@+id/timerSeekBar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
-        app:layout_constraintTop_toBottomOf="@id/timeLimitLabel"
+        android:max="20"
+        android:progress="10"
+        app:layout_constraintTop_toBottomOf="@id/timerLabel"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
-
-        <RadioButton
-            android:id="@+id/noTimeRadio"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="No Time" />
-
-        <RadioButton
-            android:id="@+id/fiveMinRadio"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="5 Minutes" />
-
-        <RadioButton
-            android:id="@+id/tenMinRadio"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="10 Minutes" />
-    </RadioGroup>
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp" />
 
     <!-- Confirm Button -->
     <Button
@@ -148,7 +142,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="@string/confirm_button"
-        app:layout_constraintTop_toBottomOf="@id/timeLimitRadioGroup"
+        app:layout_constraintTop_toBottomOf="@id/timerSeekBar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />
 

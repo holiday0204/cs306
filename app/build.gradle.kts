@@ -72,4 +72,6 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.jbcrypt)
     implementation(libs.work.runtime.ktx)
+    implementation(libs.kotlinx.coroutines.android)
+
 }

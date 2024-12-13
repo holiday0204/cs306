@@ -18,7 +18,7 @@ import com.example.assignment1.QuizClass
 class QuizSetupActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityQuizSetupBinding
-//    private var binding: ActivityQuizSetupBinding? = null
+    //    private var binding: ActivityQuizSetupBinding? = null
     private var amount = 10
     private var category: Int? = null
     private var difficulty: String? = null

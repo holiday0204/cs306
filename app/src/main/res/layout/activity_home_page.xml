@@ -58,13 +58,13 @@
             android:text="Hi, User"
             android:textSize="30sp"
             android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@id/mainProfileImage"
+            app:layout_constraintEnd_toStartOf="@id/profileImageView"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/mainProfileImage"
+            android:id="@+id/profileImageView"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:src="@drawable/ic_profilepic"
