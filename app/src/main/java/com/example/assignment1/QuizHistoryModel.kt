@@ -10,6 +10,7 @@ data class QuizHistoryModel(
     val totalQuestions: Int = 0,
     val quizResults: List<ResultModel> = listOf()
 ) : Parcelable {
+
     constructor(parcel: Parcel) : this(
         parcel.readLong(),
         parcel.readDouble(),

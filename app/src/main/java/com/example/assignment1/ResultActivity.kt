@@ -14,8 +14,6 @@ import com.google.firebase.auth.FirebaseAuth
 
 class ResultActivity : AppCompatActivity() {
     private lateinit var binding: ActivityResultBinding
-    private val db = FirebaseFirestore.getInstance()
-    private val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,12 +77,8 @@ class ResultActivity : AppCompatActivity() {
         binding.scoreProgressIndicator.max = 100
         binding.scoreProgressIndicator.progress = percentage.toInt()
 
-        // Get the user's email
-        val user = auth.currentUser
-        val userEmail = user?.email ?: ""
-
         // Create and save quiz history after displaying results
-        saveQuizHistory(finalScore, totalQuestions, resultList ?: arrayListOf(), userEmail)
+        saveQuizHistory(finalScore, totalQuestions, resultList ?: arrayListOf())
 
         // Home Page button click listener
         binding.homePageBtn.setOnClickListener {
@@ -106,9 +100,17 @@ class ResultActivity : AppCompatActivity() {
     private fun saveQuizHistory(
         finalScore: Double,
         totalQuestions: Int,
-        resultList: ArrayList<ResultModel>,
-        userEmail: String // Pass the user's email
+        resultList: ArrayList<ResultModel>
     ) {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
+        if (userId == null) {
+            Log.e("Firestore", "User is not authenticated.")
+            return
+        }
+
+        Log.d("User", "Current User ID: $userId")
+
+        // Proceed with saving quiz history if the user is authenticated
         val timestamp: Long = System.currentTimeMillis()  // Current time for storing the date
 
         // Convert resultList into a list of Maps
@@ -117,24 +119,27 @@ class ResultActivity : AppCompatActivity() {
         }
 
         // Create the QuizHistory object
-        val quizHistory = hashMapOf(
-            "date" to timestamp,
-            "score" to finalScore,
-            "questionsAnswered" to resultList.size,
-            "totalQuestions" to totalQuestions,
-            "quizResults" to quizResults,
-            "userEmail" to userEmail  // Store the user's email as a field
+        val quizHistory = QuizHistoryModel(
+            date = timestamp,
+            score = finalScore,
+            totalQuestions = totalQuestions,
+            questionsAnswered = resultList.size,
+            quizResults = resultList // Pass the list of Maps to Firestore
         )
 
         // Save the quiz history to Firestore
-        db.collection("quizHistories")  // Use a dedicated collection for quiz histories
+        val db = FirebaseFirestore.getInstance()
+        db.collection("users")
+            .document(userId) // Use userId to identify the correct user document
+            .collection("quizHistory")
             .document()  // Automatically generates a new document ID
             .set(quizHistory) // Save the quiz history object
             .addOnSuccessListener {
-                Log.d("ResultActivity", "Quiz history saved successfully")
+                Log.d("Firestore", "Quiz history saved successfully")
             }
             .addOnFailureListener { e ->
-                Log.e("ResultActivity", "Error saving quiz history: ${e.message}", e)
+                Log.e("Firestore", "Error saving quiz history: ${e.message}")
+                e.printStackTrace()
             }
     }
 }

@@ -69,13 +69,13 @@ class QuizActivity : AppCompatActivity() {
 
         // Create the result model for the current question
         val resultModel = ResultModel(
-            question = currentQuestion.question,        // Pass the question text
-            correctAnswer = currentQuestion.correct_answer, // Pass the correct answer
-            selectedAnswer = selectedAnswer,            // Pass the user's selected answer
-            correct = selectedAnswer == currentQuestion.correct_answer, // Check if the user's answer is correct
-            time = (20 - timeLeft),                     // Time remaining for this question
-            score = score,                              // Score for this question
-            timeBonus = 0                               // Assuming no timeBonus for now, adjust if needed
+            question = currentQuestion.question,  // Pass the question text
+            correctAnswer = currentQuestion.correct_answer,  // Pass the correct answer
+            selectedAnswer = selectedAnswer,  // Pass the user's selected answer
+            correct = selectedAnswer == currentQuestion.correct_answer,  // Check if the user's selected answer is correct
+            time = (20 - timeLeft),  // Time remaining for this question (keeping it as Int)
+            score = score,  // Score for this question (use Double to store the score)
+            timeBonus = 0  // If you are not implementing a time bonus, keep it as 0 (or modify if necessary)
         )
 
 
@@ -185,10 +185,6 @@ class QuizActivity : AppCompatActivity() {
     }
 
     private fun endGame() {
-        // Get the user's email
-        val user = FirebaseAuth.getInstance().currentUser
-        val userEmail = user?.email ?: "guest"  // Use "guest" if the user is not logged in
-
         // Calculate the total score at the end of the quiz
         val finalScore = resultList.sumByDouble { it.score }  // Sum the scores for all questions
 
@@ -203,9 +199,8 @@ class QuizActivity : AppCompatActivity() {
 
         // Saving to Firestore
         val db = FirebaseFirestore.getInstance()
-        db.collection("quizHistories")
-            .document(userEmail)  // Use the user's email as the document ID
-            .set(quizHistory)
+        db.collection("quiz_history")
+            .add(quizHistory)
             .addOnSuccessListener {
                 // Handle success (e.g., show a confirmation toast or transition to the result screen)
                 Toast.makeText(this, "Quiz history saved!", Toast.LENGTH_SHORT).show()
@@ -214,7 +209,6 @@ class QuizActivity : AppCompatActivity() {
                 val intent = Intent(this, ResultActivity::class.java)
                 intent.putParcelableArrayListExtra("resultList", resultList)
                 intent.putExtra("finalScore", finalScore)
-                intent.putExtra("userEmail", userEmail)  // Pass the user's email to ResultActivity
                 startActivity(intent)
                 finish()  // Close the quiz activity
             }
@@ -223,4 +217,5 @@ class QuizActivity : AppCompatActivity() {
                 Toast.makeText(this, "Error saving quiz history: ${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
+
 }

@@ -71,4 +71,5 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.jbcrypt)
+    implementation(libs.work.runtime.ktx)
 }

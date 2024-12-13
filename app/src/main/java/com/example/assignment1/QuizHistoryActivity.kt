@@ -30,7 +30,6 @@ class QuizHistoryActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
-
         binding.rvQuizHistory.layoutManager = LinearLayoutManager(this)
         val adapter = QuizHistoryAdapter(historyList) { history ->
             val intent = Intent(this, ResultActivity::class.java)
@@ -55,6 +54,7 @@ class QuizHistoryActivity : AppCompatActivity() {
             else -> super.onOptionsItemSelected(item)
         }
     }
+
     private fun fetchQuizHistories(adapter: QuizHistoryAdapter) {
         val userEmail = auth.currentUser?.email ?: return
 
@@ -69,18 +69,19 @@ class QuizHistoryActivity : AppCompatActivity() {
                     val score = document.getDouble("score") ?: 0.0  // Correctly fetch score as Double
                     val questionsAnswered = (document.getLong("questionsAnswered") ?: 0L).toInt()
                     val totalQuestions = (document.getLong("totalQuestions") ?: 0L).toInt()
+                    val result = document.getString("result") ?: ""  // Get the result as a string
                     val quizResultsData = document.get("quizResults") as? List<Map<String, Any>> ?: listOf()
 
-                    val quizResults = quizResultsData.map { result ->
+                    val quizResults = quizResultsData.map { resultMap ->
                         ResultModel(
-                            question = result["question"] as? String ?: "",
-                            selectedAnswer = result["selectedAnswer"] as? String ?: "",
-                            correctAnswer = result["correctAnswer"] as? String ?: "",
-                            correct = result["correct"] as? Boolean ?: false,
-                            score = (result["score"] as? Long)?.toDouble() ?: 0.0,  // Cast Long to Double
-                            time = (result["time"] as? Long)?.toInt() ?: 0,
-                            stability = (result["stability"] as? Long)?.toInt() ?: 0,
-                            timeBonus = (result["timeBonus"] as? Long)?.toInt() ?: 0
+                            question = resultMap["question"] as? String ?: "",
+                            selectedAnswer = resultMap["selectedAnswer"] as? String ?: "",
+                            correctAnswer = resultMap["correctAnswer"] as? String ?: "",
+                            correct = resultMap["correct"] as? Boolean ?: false,
+                            score = (resultMap["score"] as? Long)?.toDouble() ?: 0.0,  // Cast Long to Double
+                            time = (resultMap["time"] as? Long)?.toInt() ?: 0,
+                            stability = (resultMap["stability"] as? Long)?.toInt() ?: 0,
+                            timeBonus = (resultMap["timeBonus"] as? Long)?.toInt() ?: 0
                         )
                     }
 
